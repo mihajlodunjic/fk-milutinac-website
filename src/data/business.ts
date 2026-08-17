@@ -49,7 +49,6 @@ export const business = {
     mapUrlFromEnv ||
     "https://www.google.com/maps/search/?api=1&query=Nade%20Dimi%C4%87%205%E2%80%937%2C%20Zemun%2C%20Beograd",
   logo: "/logo-clean.png",
-  logoWebp: "/logo-clean.webp",
   originalLogo: "/logo.png",
   ogImage: "/og.png"
 } as const;
