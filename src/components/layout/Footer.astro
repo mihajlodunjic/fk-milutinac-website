@@ -1,0 +1,109 @@
+---
+import ClubLogo from "@/components/global/ClubLogo.astro";
+import { assetSources } from "@/data/assets";
+import { business, contacts, telHref } from "@/data/business";
+import { navigation } from "@/data/navigation";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <ClubLogo size="regular" />
+      <div>
+        <h2>FK Milutinac Zemun</h2>
+        <p>Fudbalski klub i škola fudbala na Gardošu, od 1947.</p>
+      </div>
+    </div>
+    <div class="site-footer__address">
+      <p class="address-line">{business.address.displayLine}</p>
+      <a class="text-link" href={business.mapUrl} target="_blank" rel="noopener noreferrer">Otvori lokaciju</a>
+    </div>
+    <nav class="site-footer__nav" aria-label="Footer navigacija">
+      {navigation.slice(1).map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+    <div class="site-footer__contacts">
+      <a href={telHref(contacts.school.phone)}>Škola fudbala: {contacts.school.phone}</a>
+      <a href={telHref(contacts.balloon.phone)}>Balon: {contacts.balloon.phone}</a>
+      <a href={business.instagram.url} target="_blank" rel="noopener noreferrer">@fk.milutinac</a>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <p>© {year} FK Milutinac. Sva prava zadržana.</p>
+    <p>Fotografija terena: {assetSources[0].author}, Wikimedia Commons, {assetSources[0].license}.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    color: var(--text-on-dark);
+    background: var(--ink-950);
+    border-top: 8px solid transparent;
+    border-image: var(--gradient-brand) 1;
+  }
+
+  .site-footer__inner {
+    width: min(100%, var(--container));
+    margin: 0 auto;
+    padding: 58px var(--page-pad);
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 0.8fr 1fr;
+    gap: 36px;
+  }
+
+  .site-footer__brand {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .site-footer h2 {
+    margin-bottom: 6px;
+    font-size: 1.6rem;
+  }
+
+  .site-footer p,
+  .site-footer a {
+    color: var(--text-muted-dark);
+  }
+
+  .site-footer a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .site-footer__nav,
+  .site-footer__contacts {
+    display: grid;
+    gap: 4px;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px var(--page-pad);
+    border-top: 1px solid var(--line-dark);
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 1000px) {
+    .site-footer__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .site-footer__inner,
+    .site-footer__bottom {
+      grid-template-columns: 1fr;
+      display: grid;
+    }
+
+    .site-footer__brand {
+      align-items: flex-start;
+    }
+  }
+</style>

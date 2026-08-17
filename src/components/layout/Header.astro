@@ -1,0 +1,354 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import ClubLogo from "@/components/global/ClubLogo.astro";
+import { contacts, telHref } from "@/data/business";
+import { navigation } from "@/data/navigation";
+
+type Props = {
+  currentPath: string;
+};
+
+const { currentPath } = Astro.props;
+const isActive = (href: string) => (href === "/" ? currentPath === "/" : currentPath.startsWith(href));
+---
+
+<header class="site-header" data-site-header>
+  <a class="site-header__brand" href="/" aria-label="FK Milutinac početna">
+    <ClubLogo size="regular" withText />
+  </a>
+  <nav class="site-nav" aria-label="Glavna navigacija">
+    {navigation.map((item) => (
+      <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+        {item.label}
+      </a>
+    ))}
+  </nav>
+  <ActionLink href="/kontakt/#upis" variant="primary">Upit za upis</ActionLink>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Otvori meni" data-menu-button>
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <div class="mobile-panel" id="mobile-menu" hidden data-menu-panel>
+    <nav aria-label="Mobilna navigacija">
+      {navigation.map((item) => (
+        <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+    <div class="mobile-panel__cta">
+      <ActionLink href="/kontakt/#upis" variant="primary">Upis</ActionLink>
+      <a class="mobile-panel__phone" href={telHref(contacts.school.phone)} aria-label={contacts.school.ariaLabel}>
+        {contacts.school.phone}
+      </a>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (() => {
+    const header = document.querySelector("[data-site-header]");
+    const button = document.querySelector("[data-menu-button]");
+    const panel = document.querySelector("[data-menu-panel]");
+    if (!header || !button || !panel) return;
+
+    const focusableSelector = "a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex='-1'])";
+    let lastFocus = null;
+
+    const focusables = () => Array.from(panel.querySelectorAll(focusableSelector));
+
+    const closeMenu = ({ restoreFocus = true } = {}) => {
+      if (panel.hidden) return;
+      panel.hidden = true;
+      document.body.classList.remove("menu-open");
+      button.setAttribute("aria-expanded", "false");
+      button.setAttribute("aria-label", "Otvori meni");
+      header.classList.remove("site-header--menu-open");
+      document.removeEventListener("keydown", onKeydown);
+      document.removeEventListener("pointerdown", onPointerDown);
+      if (restoreFocus && lastFocus instanceof HTMLElement) lastFocus.focus();
+    };
+
+    const openMenu = () => {
+      lastFocus = document.activeElement;
+      panel.hidden = false;
+      document.body.classList.add("menu-open");
+      button.setAttribute("aria-expanded", "true");
+      button.setAttribute("aria-label", "Zatvori meni");
+      header.classList.add("site-header--menu-open");
+      document.addEventListener("keydown", onKeydown);
+      setTimeout(() => document.addEventListener("pointerdown", onPointerDown), 0);
+      focusables()[0]?.focus();
+    };
+
+    function onKeydown(event) {
+      if (event.key === "Escape") {
+        closeMenu();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const items = focusables();
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    function onPointerDown(event) {
+      if (!header.contains(event.target)) closeMenu({ restoreFocus: false });
+    }
+
+    button.addEventListener("click", () => {
+      if (panel.hidden) openMenu();
+      else closeMenu();
+    });
+
+    panel.addEventListener("click", (event) => {
+      if (event.target.closest("a")) closeMenu({ restoreFocus: false });
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.matchMedia("(min-width: 901px)").matches) closeMenu({ restoreFocus: false });
+    });
+  })();
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    z-index: 50;
+    top: 0;
+    display: grid;
+    grid-template-columns: minmax(220px, auto) 1fr auto auto;
+    gap: 22px;
+    align-items: center;
+    min-height: var(--header-height);
+    padding: 10px var(--page-pad);
+    color: var(--text-on-dark);
+    background: rgba(7, 17, 31, 0.98);
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .site-header::after {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    content: "";
+    background: var(--gradient-brand);
+    transform-origin: left;
+    animation: header-line 720ms var(--ease-board) both;
+  }
+
+  .site-header__brand {
+    min-height: 58px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .site-nav a {
+    position: relative;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 10px;
+    color: var(--text-muted-dark);
+    font-weight: 700;
+  }
+
+  .site-nav a[aria-current="page"],
+  .site-nav a:hover {
+    color: var(--text-on-dark);
+  }
+
+  .site-nav a::after {
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    left: 10px;
+    height: 2px;
+    content: "";
+    background: var(--gradient-brand);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms var(--ease-board);
+  }
+
+  .site-nav a:hover::after,
+  .site-nav a[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+
+  .nav-toggle {
+    display: none;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border: 1px solid var(--line-dark);
+    border-radius: 4px;
+    color: var(--text-on-dark);
+    background: var(--ink-900);
+    cursor: pointer;
+  }
+
+  .nav-toggle span {
+    grid-area: 1 / 1;
+    width: 23px;
+    height: 2px;
+    background: currentColor;
+    transition:
+      transform 250ms var(--ease-board),
+      opacity 250ms var(--ease-board);
+  }
+
+  .nav-toggle span:nth-child(1) {
+    transform: translateY(-7px);
+  }
+
+  .nav-toggle span:nth-child(3) {
+    transform: translateY(7px);
+  }
+
+  .site-header--menu-open .nav-toggle span:nth-child(1) {
+    transform: rotate(45deg);
+  }
+
+  .site-header--menu-open .nav-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-header--menu-open .nav-toggle span:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  .mobile-panel {
+    position: fixed;
+    z-index: -1;
+    top: var(--header-height);
+    right: 0;
+    left: 0;
+    display: grid;
+    gap: 26px;
+    max-height: calc(100svh - var(--header-height));
+    padding: 30px var(--page-pad) 36px;
+    overflow-y: auto;
+    color: var(--text-on-dark);
+    background: var(--ink-950);
+    border-bottom: 2px solid var(--milutinac-red);
+    transform: translateY(-12px);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 250ms var(--ease-board),
+      transform 250ms var(--ease-board);
+  }
+
+  .mobile-panel[hidden] {
+    display: none;
+  }
+
+  .site-header--menu-open .mobile-panel {
+    display: grid;
+    z-index: 49;
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mobile-panel nav {
+    display: grid;
+    gap: 6px;
+  }
+
+  .mobile-panel a {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--line-dark);
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 700;
+  }
+
+  .mobile-panel a[aria-current="page"] {
+    color: var(--text-on-dark);
+    border-bottom-color: var(--milutinac-red);
+  }
+
+  .mobile-panel__cta {
+    display: grid;
+    gap: 14px;
+    padding-top: 8px;
+  }
+
+  .mobile-panel__cta :global(.button) {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 1rem;
+  }
+
+  .mobile-panel__phone {
+    font-family: var(--font-mono) !important;
+    font-size: 1rem !important;
+  }
+
+  @keyframes header-line {
+    from {
+      transform: scaleX(0);
+    }
+
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .site-header {
+      grid-template-columns: auto 1fr auto auto;
+    }
+
+    .site-nav {
+      gap: 0;
+    }
+
+    .site-nav a {
+      padding-inline: 7px;
+      font-size: 0.92rem;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-header {
+      grid-template-columns: 1fr auto;
+    }
+
+    .site-nav,
+    .site-header > :global(.button) {
+      display: none;
+    }
+
+    .nav-toggle {
+      display: grid;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .site-header :global(.club-logo__text) {
+      display: none;
+    }
+  }
+</style>

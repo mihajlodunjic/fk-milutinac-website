@@ -1,0 +1,33 @@
+---
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer.astro";
+import SeoHead from "@/components/layout/SeoHead.astro";
+import "@/styles/global.css";
+import type { SeoProps } from "@/types";
+
+type Props = {
+  seo: SeoProps;
+  schema?: Record<string, unknown>;
+};
+
+const { seo, schema } = Astro.props;
+const currentPath = new URL(Astro.url).pathname;
+---
+
+<!doctype html>
+<html lang="sr-Latn-RS">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07111F" />
+    <SeoHead {...seo} schema={schema} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Preskoči na sadržaj</a>
+    <Header currentPath={currentPath} />
+    <main id="main" class="site-main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

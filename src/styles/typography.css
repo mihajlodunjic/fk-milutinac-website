@@ -1,0 +1,124 @@
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-on-light);
+  background: var(--paper-50);
+  letter-spacing: 0;
+}
+
+h1,
+h2,
+h3,
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: 4rem;
+  line-height: 0.98;
+}
+
+h2 {
+  font-size: 3rem;
+  line-height: 1.06;
+}
+
+h3 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+p {
+  max-width: 68ch;
+}
+
+.eyebrow,
+.section-index,
+.meta,
+.address-line {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lead {
+  font-size: 1.125rem;
+  line-height: 1.72;
+}
+
+.hero-title {
+  font-size: 6rem;
+  line-height: 0.94;
+  max-width: 9.5ch;
+}
+
+.page-title {
+  font-size: 5rem;
+  line-height: 1;
+  max-width: 12ch;
+}
+
+@media (max-width: 1199px) {
+  h1 {
+    font-size: 3.5rem;
+  }
+
+  h2 {
+    font-size: 2.6rem;
+  }
+
+  .hero-title {
+    font-size: 4.8rem;
+  }
+
+  .page-title {
+    font-size: 4rem;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    font-size: 0.98rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2.25rem;
+  }
+
+  h3 {
+    font-size: 1.35rem;
+  }
+
+  .lead {
+    font-size: 1.04rem;
+  }
+
+  .hero-title {
+    font-size: 3.15rem;
+    max-width: 9ch;
+  }
+
+  .page-title {
+    font-size: 3.1rem;
+  }
+}
+
+@media (max-width: 374px) {
+  .hero-title,
+  .page-title {
+    font-size: 2.7rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+}

@@ -1,0 +1,24 @@
+---
+type Props = {
+  href: string;
+  label?: string;
+  variant?: "primary" | "light" | "ghost" | "text";
+  ariaLabel?: string;
+  external?: boolean;
+};
+
+const { href, label, variant = "text", ariaLabel, external = false } = Astro.props;
+---
+
+<a
+  class={variant === "text" ? "text-link" : `button button--${variant}`}
+  href={href}
+  aria-label={ariaLabel}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+>
+  <slot>{label}</slot>
+  <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true">
+    <path d="M4 10h10.5M10.5 5 15 10l-4.5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+  </svg>
+</a>

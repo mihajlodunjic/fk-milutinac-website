@@ -1,0 +1,81 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import ContactRouter from "@/components/global/ContactRouter.astro";
+import { business } from "@/data/business";
+---
+
+<section class="section location-block" aria-labelledby="location-title">
+  <div class="section__inner grid-12">
+    <div class="location-block__copy">
+      <p class="section-index">SC MILUTINAC GARDOŠ</p>
+      <h2 id="location-title">Na terenu u Zemunu</h2>
+      <p class="address-large">{business.address.line}</p>
+      <p class="lead">
+        Na jednoj lokaciji nalaze se stadion, balon, otvoreni tereni i povezani sadržaji kompleksa. Za tačnu grupu, termin
+        ili rezervaciju izaberite odgovarajući kontakt.
+      </p>
+      <div class="button-row">
+        <ActionLink href={business.mapUrl} variant="primary" external>Otvori mapu</ActionLink>
+        <ActionLink href="/kontakt/" variant="ghost">Pogledaj sve kontakte</ActionLink>
+      </div>
+    </div>
+    <div class="location-block__map map-preview" aria-label="Statički prikaz lokacije FK Milutinac u Zemunu">
+      <span class="map-preview__pin" aria-hidden="true"></span>
+      <div class="map-preview__label">
+        <p class="meta">{business.address.displayLine}</p>
+        <strong>{business.locationName}</strong>
+      </div>
+    </div>
+    <div class="location-block__contacts">
+      <ContactRouter keys={["school", "balloon", "birthdays"]} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .location-block {
+    background: var(--paper-100);
+  }
+
+  .location-block__copy {
+    grid-column: 1 / 6;
+    display: grid;
+    align-content: start;
+    gap: 22px;
+  }
+
+  .address-large {
+    max-width: 10ch;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.02;
+  }
+
+  .location-block__map {
+    grid-column: 7 / -1;
+  }
+
+  .location-block__contacts {
+    grid-column: 2 / 12;
+    margin-top: 44px;
+  }
+
+  @media (max-width: 1023px) {
+    .location-block__copy,
+    .location-block__map,
+    .location-block__contacts {
+      grid-column: 1 / -1;
+    }
+
+    .address-large {
+      max-width: 16ch;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .address-large {
+      font-size: 2.25rem;
+    }
+  }
+</style>

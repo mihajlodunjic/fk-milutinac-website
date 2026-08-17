@@ -1,0 +1,37 @@
+---
+import { imageAssets } from "@/data/assets";
+
+type Props = {
+  variant?: "wide" | "portrait" | "banner";
+  alt?: string;
+  loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "low" | "auto";
+  caption?: string;
+  className?: string;
+};
+
+const {
+  variant = "wide",
+  alt = imageAssets.field.alt,
+  loading = "lazy",
+  fetchpriority = "auto",
+  caption,
+  className = ""
+} = Astro.props;
+const image = imageAssets.field[variant];
+---
+
+<picture class={`photo-frame ${className}`}>
+  <source srcset={image.avif} type="image/avif" />
+  <source srcset={image.webp} type="image/webp" />
+  <img
+    src={image.webp}
+    width={image.width}
+    height={image.height}
+    alt={alt}
+    loading={loading}
+    fetchpriority={fetchpriority}
+    decoding="async"
+  />
+  {caption && <span class="photo-caption">{caption}</span>}
+</picture>

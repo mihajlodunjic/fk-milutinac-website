@@ -1,0 +1,138 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import InnerPageLayout from "@/layouts/InnerPageLayout.astro";
+import { business, contacts, telHref } from "@/data/business";
+import { restaurantEvents } from "@/data/events";
+import { seo } from "@/data/seo";
+import { makeBreadcrumbs, makeSchema } from "@/utils/schema";
+
+const breadcrumbs = makeBreadcrumbs(seo.restaurant.path, "Restoran i proslave");
+---
+
+<BaseLayout
+  seo={{ ...seo.restaurant, preloadHero: true }}
+  schema={makeSchema({ path: seo.restaurant.path, breadcrumbs, includeRestaurant: true })}
+>
+  <InnerPageLayout
+    metadata="RESTAURANT MILUTINAC / ZEMUN"
+    title="Proslave i okupljanja na istoj zemunskoj adresi"
+    intro="Na lokaciji sportskog kompleksa nalazi se Restoran Milutinac, sa domaćom kuhinjom i prostorom za privatna i poslovna okupljanja."
+    breadcrumbs={breadcrumbs}
+  >
+    <div slot="actions" class="button-row">
+      <ActionLink href={telHref(contacts.restaurantPrimary.phone)} variant="primary" ariaLabel={contacts.restaurantPrimary.ariaLabel}>
+        Pozovi za proslavu
+      </ActionLink>
+      <ActionLink href={business.mapUrl} variant="ghost" external>Otvori mapu</ActionLink>
+    </div>
+
+    <section class="section restaurant-kitchen" aria-labelledby="kitchen-title">
+      <div class="section__inner grid-12">
+        <div class="restaurant-kitchen__copy">
+          <h2 id="kitchen-title">Domaća i tradicionalna kuhinja</h2>
+          <p class="lead">
+            Ponuda restorana oslanja se na domaće ukuse i tradicionalne specijalitete, uz mogućnost dogovora za različite
+            vrste okupljanja.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section restaurant-events" aria-labelledby="events-title">
+      <div class="section__inner grid-12">
+        <div class="restaurant-events__copy">
+          <h2 id="events-title">Od porodičnog ručka do velike proslave</h2>
+          <p class="lead">Za raspoloživost prostora, meni i uslove organizacije potrebno je javiti se restoranu.</p>
+        </div>
+        <ul class="restaurant-events__list" aria-label="Vrste događaja">
+          {restaurantEvents.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="section restaurant-contact section--ink" aria-labelledby="restaurant-contact-title">
+      <div class="section__inner grid-12">
+        <div class="restaurant-contact__copy">
+          <h2 id="restaurant-contact-title">Dogovorite proslavu</h2>
+          <p class="lead">Pozovite restoran i navedite vrstu događaja, željeni datum i okviran broj gostiju.</p>
+          <div class="button-row">
+            <ActionLink href={telHref(contacts.restaurantPrimary.phone)} variant="primary" ariaLabel={contacts.restaurantPrimary.ariaLabel}>
+              Pozovi {contacts.restaurantPrimary.phone}
+            </ActionLink>
+            <ActionLink href={telHref(contacts.restaurantSecondary.phone)} variant="ghost" ariaLabel={contacts.restaurantSecondary.ariaLabel}>
+              Pozovi {contacts.restaurantSecondary.phone}
+            </ActionLink>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section restaurant-location" aria-labelledby="restaurant-location-title">
+      <div class="section__inner grid-12">
+        <div class="restaurant-location__copy">
+          <p class="address-line">{business.address.compactLine}</p>
+          <ActionLink href={business.mapUrl} variant="ghost" external>Otvori mapu</ActionLink>
+        </div>
+      </div>
+    </section>
+  </InnerPageLayout>
+</BaseLayout>
+
+<style>
+  .restaurant-kitchen__copy,
+  .restaurant-events__copy,
+  .restaurant-contact__copy,
+  .restaurant-location__copy {
+    grid-column: 3 / 10;
+    display: grid;
+    gap: 20px;
+  }
+
+  .restaurant-events {
+    background: var(--paper-100);
+  }
+
+  .restaurant-events__list {
+    grid-column: 3 / 11;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 34px;
+    list-style: none;
+    border-top: 1px solid var(--ink-950);
+    border-left: 1px solid var(--ink-950);
+  }
+
+  .restaurant-events__list li {
+    min-height: 88px;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-right: 1px solid var(--ink-950);
+    border-bottom: 1px solid var(--ink-950);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    .restaurant-kitchen__copy,
+    .restaurant-events__copy,
+    .restaurant-contact__copy,
+    .restaurant-location__copy,
+    .restaurant-events__list {
+      grid-column: 1 / -1;
+    }
+
+    .restaurant-events__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .restaurant-events__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,142 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import ContactRouter from "@/components/global/ContactRouter.astro";
+import ResponsiveFieldImage from "@/components/global/ResponsiveFieldImage.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import InnerPageLayout from "@/layouts/InnerPageLayout.astro";
+import { business, contacts, telHref } from "@/data/business";
+import { seo } from "@/data/seo";
+import { makeBreadcrumbs, makeSchema } from "@/utils/schema";
+
+const breadcrumbs = makeBreadcrumbs(seo.complex.path, "Sportski kompleks");
+---
+
+<BaseLayout seo={{ ...seo.complex, preloadHero: true }} schema={makeSchema({ path: seo.complex.path, breadcrumbs })}>
+  <InnerPageLayout
+    metadata="SC MILUTINAC GARDOŠ"
+    title="Teren za trening, utakmicu i rekreaciju"
+    intro="Sportski kompleks FK Milutinac obuhvata stadion, balon sa veštačkom travom i otvorene fudbalske terene na adresi Nade Dimić 5–7 u Zemunu."
+    breadcrumbs={breadcrumbs}
+  >
+    <div slot="actions" class="button-row">
+      <ActionLink href={telHref(contacts.balloon.phone)} variant="primary" ariaLabel={contacts.balloon.ariaLabel}>Pozovi za termin</ActionLink>
+      <ActionLink href={business.mapUrl} variant="ghost" external>Otvori mapu</ActionLink>
+    </div>
+
+    <section class="section facility-section" aria-labelledby="balloon-title">
+      <div class="section__inner grid-12">
+        <div class="facility-section__copy">
+          <p class="section-index">FKM / BALON</p>
+          <h2 id="balloon-title">Balon sa veštačkom travom</h2>
+          <p class="lead">
+            Balon se koristi za fudbal, mali fudbal, trening i rekreativnu igru. Aktuelna cena i dostupni termini dobijaju
+            se direktno putem telefona.
+          </p>
+          <p class="meta">Kontakt: {contacts.balloon.phone}</p>
+          <ActionLink href={telHref(contacts.balloon.phone)} variant="primary" ariaLabel={contacts.balloon.ariaLabel}>
+            Pozovi za termin u balonu
+          </ActionLink>
+        </div>
+        <div class="facility-section__image">
+          <ResponsiveFieldImage variant="wide" caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section open-fields" aria-labelledby="fields-title">
+      <div class="section__inner grid-12">
+        <div class="open-fields__copy">
+          <h2 id="fields-title">Otvoreni fudbalski tereni</h2>
+          <p class="lead">
+            Otvoreni tereni deo su svakodnevnog rada kluba i sportskog kompleksa. Za mogućnost korišćenja, aktuelne
+            termine i uslove obratite se klubu.
+          </p>
+          <ActionLink href={telHref(contacts.operations.phone)} variant="ghost" ariaLabel={contacts.operations.ariaLabel}>
+            Kontaktiraj klub
+          </ActionLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--ink complex-birthdays" aria-labelledby="complex-birthdays-title">
+      <div class="section__inner grid-12">
+        <div class="complex-birthdays__copy">
+          <h2 id="complex-birthdays-title">Rođendan uz fudbal</h2>
+          <p class="lead">
+            Dečji rođendan može da se organizuje uz fudbal, igru i druženje u ambijentu sportskog kompleksa. Za sadržaj,
+            raspoložive termine i dogovor javite se telefonom.
+          </p>
+          <p class="meta">Kontakt: {contacts.birthdays.phone}</p>
+          <div class="button-row">
+            <ActionLink href={telHref(contacts.birthdays.phone)} variant="primary" ariaLabel={contacts.birthdays.ariaLabel}>
+              Pozovi za rođendan
+            </ActionLink>
+            <ActionLink href="/fudbalski-rodjendani/" variant="ghost">Pogledaj fudbalske rođendane</ActionLink>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section complex-location" aria-labelledby="complex-location-title">
+      <div class="section__inner grid-12">
+        <div class="complex-location__copy">
+          <h2 id="complex-location-title">Sve na adresi Nade Dimić 5–7</h2>
+          <p class="lead">
+            Sportski kompleks se nalazi u Zemunu i u javnim objavama se pojavljuje i kao SC Milutinac Gardoš ili Stadion
+            Milutinac.
+          </p>
+          <ActionLink href={business.mapUrl} variant="ghost" external>Otvori mapu</ActionLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-table" aria-labelledby="complex-contact-title">
+      <div class="section__inner">
+        <div class="section-heading">
+          <p class="section-index">FKM / KONTAKT</p>
+          <h2 id="complex-contact-title">Kontakt prema razlogu dolaska</h2>
+        </div>
+        <ContactRouter keys={["balloon", "operations", "birthdays"]} />
+      </div>
+    </section>
+  </InnerPageLayout>
+</BaseLayout>
+
+<style>
+  .facility-section__copy,
+  .open-fields__copy,
+  .complex-birthdays__copy,
+  .complex-location__copy {
+    grid-column: 2 / 8;
+    display: grid;
+    gap: 20px;
+  }
+
+  .facility-section__image {
+    grid-column: 8 / -1;
+    min-height: 480px;
+  }
+
+  .facility-section__image .photo-frame {
+    height: 100%;
+  }
+
+  .open-fields,
+  .complex-location {
+    background: var(--paper-100);
+  }
+
+  @media (max-width: 1023px) {
+    .facility-section__copy,
+    .open-fields__copy,
+    .complex-birthdays__copy,
+    .complex-location__copy,
+    .facility-section__image {
+      grid-column: 1 / -1;
+    }
+
+    .facility-section__image {
+      min-height: 390px;
+    }
+  }
+</style>

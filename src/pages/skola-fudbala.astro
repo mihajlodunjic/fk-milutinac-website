@@ -1,0 +1,270 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import ResponsiveFieldImage from "@/components/global/ResponsiveFieldImage.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import InnerPageLayout from "@/layouts/InnerPageLayout.astro";
+import { business, contacts, telHref } from "@/data/business";
+import { schoolFaq, schoolPillars } from "@/data/school";
+import { seo } from "@/data/seo";
+import { makeBreadcrumbs, makeSchema } from "@/utils/schema";
+
+const breadcrumbs = makeBreadcrumbs(seo.school.path, "Škola fudbala");
+const steps = [
+  {
+    title: "Pošaljite upit",
+    text: "Navedite ime roditelja, kontakt i uzrast deteta."
+  },
+  {
+    title: "Proverite grupu i termin",
+    text: "Škola će vam dati aktuelne informacije o grupama i rasporedu."
+  },
+  {
+    title: "Dogovorite sledeći korak",
+    text: "Nakon razgovora sa školom znaćete kojoj grupi dete može da se priključi i kada."
+  }
+];
+---
+
+<BaseLayout seo={{ ...seo.school, preloadHero: true }} schema={makeSchema({ path: seo.school.path, breadcrumbs, faq: schoolFaq })}>
+  <InnerPageLayout
+    metadata="FK MILUTINAC / ŠKOLA FUDBALA"
+    title="Škola fudbala za prve korake i dalji razvoj"
+    intro="Trening u Milutincu spaja fudbalsku igru, razvoj motorike, individualni napredak i pripadnost ekipi. Za aktuelne grupe i termine javite se direktno školi."
+    breadcrumbs={breadcrumbs}
+  >
+    <div slot="actions" class="button-row">
+      <ActionLink href="/kontakt/#upis" variant="primary">Pošalji upit za upis</ActionLink>
+      <ActionLink href={telHref(contacts.school.phone)} variant="ghost" ariaLabel={contacts.school.ariaLabel}>Pozovi školu</ActionLink>
+    </div>
+
+    <section class="section school-intent" aria-labelledby="intent-title">
+      <div class="section__inner grid-12">
+        <div class="school-intent__copy">
+          <h2 id="intent-title">Za dete koje želi da igra i uči</h2>
+          <p class="lead">
+            Škola je namenjena deci koja prave prve fudbalske korake, kao i igračima koji žele da nastave razvoj kroz
+            organizovan rad. Odgovarajuća grupa zavisi od uzrasta, iskustva i aktuelne organizacije selekcija.
+          </p>
+          <ActionLink href="/kontakt/#upis" variant="ghost">Proveri odgovarajuću grupu</ActionLink>
+        </div>
+        <div class="school-intent__image">
+          <ResponsiveFieldImage variant="wide" caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section school-method" aria-labelledby="method-title">
+      <div class="section__inner grid-12">
+        <p class="section-index">PRISTUP RADU</p>
+        <div class="school-method__copy">
+          <h2 id="method-title">Trening koji ima smisao za uzrast deteta</h2>
+          <p>
+            Rad sa decom nije samo niz vežbi. Trening treba da bude dovoljno jasan da dete razume zadatak, dovoljno aktivan
+            da zadrži pažnju i dovoljno podsticajan da poželi ponovo da dođe.
+          </p>
+          <p>
+            Fudbal, kretanje, druženje i sportske navike razvijaju se zajedno. Individualni napredak posmatra se u okviru
+            grupe, bez potrebe da svako dete napreduje istom brzinom.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section pillars" aria-labelledby="pillars-title">
+      <div class="section__inner">
+        <div class="section-heading">
+          <p class="section-index">FKM / 04</p>
+          <h2 id="pillars-title">Četiri oslonca rada</h2>
+        </div>
+        <div class="program-list">
+          {schoolPillars.map((item) => (
+            <article class="program-row">
+              <h3>{item.name}</h3>
+              <p>{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--ink enrollment" id="upis" aria-labelledby="enrollment-title">
+      <div class="section__inner grid-12">
+        <div class="enrollment__copy">
+          <p class="section-index">UPIS</p>
+          <h2 id="enrollment-title">Tri koraka do tačne informacije</h2>
+        </div>
+        <div class="enrollment__steps">
+          {steps.map((step, index) => (
+            <article class="enrollment-step">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </article>
+          ))}
+          <ActionLink href="/kontakt/#upis" variant="primary">Pošalji upit za upis</ActionLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="section training-location" aria-labelledby="training-location-title">
+      <div class="section__inner grid-12">
+        <div class="training-location__copy">
+          <h2 id="training-location-title">Balon i otvoreni tereni na Gardošu</h2>
+          <p class="lead">
+            Treninzi se održavaju u sportskom kompleksu FK Milutinac, na adresi Nade Dimić 5–7 u Zemunu. U zavisnosti od
+            grupe i rasporeda koriste se balon i otvoreni tereni.
+          </p>
+          <ActionLink href={business.mapUrl} variant="ghost" external>Otvori mapu</ActionLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq-section" aria-labelledby="faq-title">
+      <div class="section__inner grid-12">
+        <div class="faq-section__heading">
+          <p class="section-index">FAQ</p>
+          <h2 id="faq-title">Pitanja roditelja</h2>
+        </div>
+        <div class="faq-section__list">
+          {schoolFaq.map((item) => (
+            <details>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta-band school-final" aria-labelledby="school-final-title">
+      <div class="section__inner">
+        <h2 id="school-final-title">Proverite aktuelnu grupu i termin</h2>
+        <p class="lead">Javite se školi fudbala i navedite uzrast deteta.</p>
+        <div class="button-row">
+          <ActionLink href="/kontakt/#upis" variant="primary">Pošalji upit</ActionLink>
+          <ActionLink href={telHref(contacts.school.phone)} variant="ghost" ariaLabel={contacts.school.ariaLabel}>
+            Pozovi {contacts.school.phone}
+          </ActionLink>
+        </div>
+      </div>
+    </section>
+  </InnerPageLayout>
+</BaseLayout>
+
+<style>
+  .school-intent__copy {
+    grid-column: 1 / 6;
+    display: grid;
+    gap: 22px;
+    align-content: center;
+  }
+
+  .school-intent__image {
+    grid-column: 7 / -1;
+    min-height: 430px;
+  }
+
+  .school-intent__image .photo-frame {
+    height: 100%;
+  }
+
+  .school-method {
+    background: var(--paper-100);
+  }
+
+  .school-method .section-index {
+    grid-column: 1 / 3;
+  }
+
+  .school-method__copy {
+    grid-column: 4 / 11;
+    display: grid;
+    gap: 18px;
+  }
+
+  .enrollment__copy {
+    grid-column: 1 / 5;
+  }
+
+  .enrollment__steps {
+    grid-column: 6 / -1;
+    display: grid;
+    gap: 16px;
+  }
+
+  .enrollment-step {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 8px 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .enrollment-step span {
+    grid-row: span 2;
+    color: var(--milutinac-red);
+    font-family: var(--font-mono);
+  }
+
+  .enrollment-step p {
+    color: var(--text-muted-dark);
+  }
+
+  .training-location {
+    background: var(--paper-100);
+  }
+
+  .training-location__copy {
+    grid-column: 3 / 10;
+    display: grid;
+    gap: 20px;
+  }
+
+  .faq-section__heading {
+    grid-column: 1 / 5;
+  }
+
+  .faq-section__list {
+    grid-column: 6 / -1;
+    display: grid;
+    gap: 12px;
+  }
+
+  details {
+    border-top: 1px solid var(--line-light);
+    border-bottom: 1px solid var(--line-light);
+    background: var(--paper-50);
+  }
+
+  summary {
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 800;
+  }
+
+  details p {
+    padding: 0 0 20px;
+    color: var(--text-muted-light);
+  }
+
+  .school-final .section__inner {
+    display: grid;
+    gap: 22px;
+  }
+
+  @media (max-width: 1023px) {
+    .school-intent__copy,
+    .school-intent__image,
+    .school-method .section-index,
+    .school-method__copy,
+    .enrollment__copy,
+    .enrollment__steps,
+    .training-location__copy,
+    .faq-section__heading,
+    .faq-section__list {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

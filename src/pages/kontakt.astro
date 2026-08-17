@@ -1,0 +1,116 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import ContactRouter from "@/components/global/ContactRouter.astro";
+import ContactForm from "@/components/forms/ContactForm.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import InnerPageLayout from "@/layouts/InnerPageLayout.astro";
+import { business } from "@/data/business";
+import { seo } from "@/data/seo";
+import { makeBreadcrumbs, makeSchema } from "@/utils/schema";
+
+const breadcrumbs = makeBreadcrumbs(seo.contact.path, "Kontakt");
+const hasContactEndpoint = Boolean(import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT);
+---
+
+<BaseLayout seo={seo.contact} schema={makeSchema({ path: seo.contact.path, breadcrumbs })}>
+  <InnerPageLayout
+    metadata="KONTAKT / FK MILUTINAC"
+    title="Jedna adresa, pravi kontakt za svaki upit"
+    intro="Izaberite razlog javljanja kako biste odmah dobili odgovarajući broj telefona."
+    breadcrumbs={breadcrumbs}
+  >
+    <div slot="actions" class="button-row">
+      <ActionLink href={business.mapUrl} variant="primary" external>Otvori mapu</ActionLink>
+    </div>
+
+    <section class="section contact-dispatcher" id="upis" aria-labelledby="dispatcher-title">
+      <div class="section__inner">
+        <div class="section-heading">
+          <p class="section-index">FKM / KONTAKT</p>
+          <h2 id="dispatcher-title">Kontaktni dispečer</h2>
+          <p>{business.address.line}</p>
+        </div>
+        <ContactRouter />
+      </div>
+    </section>
+
+    <section class="section contact-address" aria-labelledby="contact-address-title">
+      <div class="section__inner grid-12">
+        <div class="contact-address__copy">
+          <p class="section-index">ADRESA</p>
+          <h2 id="contact-address-title">{business.address.line}</h2>
+          <p class="lead">SC Milutinac Gardoš je zajednička lokacija kluba, škole fudbala, balona, terena i povezanih sadržaja.</p>
+          <ActionLink href={business.mapUrl} variant="ghost" external>Otvori mapu</ActionLink>
+        </div>
+        <div class="contact-address__map map-preview" aria-label="Statički prikaz lokacije u Zemunu">
+          <span class="map-preview__pin" aria-hidden="true"></span>
+          <div class="map-preview__label">
+            <p class="meta">{business.address.displayLine}</p>
+            <strong>{business.locationName}</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {hasContactEndpoint && (
+      <section class="section contact-form-section" aria-labelledby="contact-form-title">
+        <div class="section__inner">
+          <ContactForm />
+        </div>
+      </section>
+    )}
+
+    <section class="section section--dark contact-instagram" aria-labelledby="instagram-title">
+      <div class="section__inner grid-12">
+        <div class="contact-instagram__copy">
+          <h2 id="instagram-title">Pratite rad kluba</h2>
+          <p class="lead">Aktuelne objave, utakmice i aktivnosti kluba pratite na zvaničnom Instagram profilu.</p>
+          <ActionLink href={business.instagram.url} variant="primary" external>Otvori @fk.milutinac</ActionLink>
+        </div>
+      </div>
+    </section>
+  </InnerPageLayout>
+</BaseLayout>
+
+<style>
+  .contact-address {
+    background: var(--paper-100);
+  }
+
+  .contact-address__copy {
+    grid-column: 1 / 6;
+    display: grid;
+    gap: 20px;
+    align-content: center;
+  }
+
+  .contact-address__copy h2 {
+    font-size: 3.2rem;
+  }
+
+  .contact-address__map {
+    grid-column: 7 / -1;
+  }
+
+  .contact-form-section {
+    background: var(--paper-50);
+  }
+
+  .contact-instagram__copy {
+    grid-column: 3 / 10;
+    display: grid;
+    gap: 20px;
+  }
+
+  @media (max-width: 1023px) {
+    .contact-address__copy,
+    .contact-address__map,
+    .contact-instagram__copy {
+      grid-column: 1 / -1;
+    }
+
+    .contact-address__copy h2 {
+      font-size: 2.4rem;
+    }
+  }
+</style>

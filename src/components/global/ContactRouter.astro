@@ -1,0 +1,111 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import { contacts, telHref, type ContactKey } from "@/data/business";
+
+type Props = {
+  keys?: ContactKey[];
+  dark?: boolean;
+};
+
+const {
+  keys = ["school", "balloon", "birthdays", "restaurantPrimary", "operations", "sports"],
+  dark = false
+} = Astro.props;
+---
+
+<div class={`contact-router ${dark ? "contact-router--dark" : ""}`}>
+  {keys.map((key, index) => {
+    const contact = contacts[key];
+    return (
+      <article class="contact-router__row">
+        <span class="contact-router__index">{String(index + 1).padStart(2, "0")}</span>
+        <div>
+          <h3>{contact.label}</h3>
+          <p>{contact.purpose}</p>
+        </div>
+        <a class="contact-router__phone" href={telHref(contact.phone)} aria-label={contact.ariaLabel}>
+          {contact.phone}
+        </a>
+        <ActionLink href={telHref(contact.phone)} ariaLabel={contact.ariaLabel}>
+          {contact.cta}
+        </ActionLink>
+      </article>
+    );
+  })}
+</div>
+
+<style>
+  .contact-router {
+    border-top: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+  }
+
+  .contact-router__row {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1.3fr) minmax(150px, 0.7fr) minmax(160px, auto);
+    gap: 18px;
+    align-items: center;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line-light);
+  }
+
+  .contact-router--dark .contact-router__row {
+    border-bottom-color: var(--line-dark);
+  }
+
+  .contact-router__row:last-child {
+    border-bottom: 0;
+  }
+
+  .contact-router__index,
+  .contact-router__phone {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .contact-router__index {
+    color: var(--milutinac-red);
+  }
+
+  .contact-router h3 {
+    margin-bottom: 4px;
+  }
+
+  .contact-router p {
+    color: var(--text-muted-light);
+  }
+
+  .contact-router--dark p {
+    color: var(--text-muted-dark);
+  }
+
+  .contact-router__phone {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    .contact-router__row {
+      grid-template-columns: 44px minmax(0, 1fr);
+    }
+
+    .contact-router__phone,
+    .contact-router .text-link {
+      grid-column: 2;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .contact-router__row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .contact-router__phone,
+    .contact-router .text-link {
+      grid-column: 1;
+    }
+  }
+</style>

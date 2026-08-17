@@ -1,0 +1,150 @@
+---
+const endpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT || "";
+const formEnabled = Boolean(endpoint);
+---
+
+{formEnabled && (
+  <form class="contact-form" action={endpoint} method="post" data-contact-form novalidate>
+    <div class="form-copy">
+      <h2>Pošaljite upit</h2>
+      <p>Izaberite temu i ostavite podatke za kontakt. Slanje forme ne potvrđuje upis, rezervaciju ili termin.</p>
+    </div>
+    <p class="form-status" data-form-status aria-live="polite"></p>
+    <div class="honeypot" aria-hidden="true">
+      <label>
+        Ne popunjavati
+        <input type="text" name="website" tabindex="-1" autocomplete="off" />
+      </label>
+    </div>
+    <label>
+      Vrsta upita
+      <select name="topic" required data-error="Izaberite vrstu upita.">
+        <option value="">Izaberite</option>
+        <option>Upis u školu fudbala</option>
+        <option>Aktuelna grupa ili termin</option>
+        <option>Balon ili otvoreni teren</option>
+        <option>Dečji rođendan</option>
+        <option>Restoran ili proslava</option>
+        <option>Klub i selekcije</option>
+        <option>Drugo</option>
+      </select>
+    </label>
+    <label>
+      Ime i prezime
+      <input name="name" autocomplete="name" required data-error="Unesite ime i prezime." />
+    </label>
+    <label>
+      Broj telefona
+      <input
+        name="phone"
+        type="tel"
+        autocomplete="tel"
+        placeholder="Na primer: 069 123 4567"
+        required
+        pattern="^[+0-9 ()/-]{6,}$"
+        data-error="Proverite da li je broj telefona ispravno unet."
+      />
+    </label>
+    <label>
+      E-mail <span>Nije obavezno</span>
+      <input name="email" type="email" autocomplete="email" data-error="Proverite da li je e-mail adresa ispravno uneta." />
+    </label>
+    <label>
+      Uzrast deteta
+      <input name="child_age" placeholder="Na primer: 8 godina" data-school-field data-error="Unesite uzrast deteta." />
+    </label>
+    <label>
+      Poruka
+      <textarea name="message" placeholder="Napišite šta želite da proverite." required data-error="Napišite kratku poruku."></textarea>
+    </label>
+    <p class="privacy-note">Podaci iz forme koriste se samo za odgovor na vaš upit.</p>
+    <button class="button button--primary" type="submit">Pošalji upit</button>
+  </form>
+)}
+
+{formEnabled && (
+  <script is:inline>
+    const form = document.querySelector("[data-contact-form]");
+    if (form) {
+      const status = form.querySelector("[data-form-status]");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        status.textContent = "";
+        const invalid = Array.from(form.elements).find((field) => field.willValidate && !field.checkValidity());
+        if (invalid) {
+          status.textContent = invalid.dataset.error || "Proverite označena polja i pokušajte ponovo.";
+          invalid.focus();
+          return;
+        }
+        const submit = form.querySelector("button[type='submit']");
+        submit.disabled = true;
+        submit.textContent = "Šaljemo upit…";
+        try {
+          const response = await fetch(form.action, {
+            method: "POST",
+            body: new FormData(form),
+            headers: { Accept: "application/json" }
+          });
+          if (!response.ok) throw new Error("request failed");
+          form.reset();
+          status.textContent = "Upit je poslat. Klub će vas kontaktirati putem telefona ili e-maila koji ste naveli.";
+        } catch (error) {
+          status.textContent =
+            "Upit trenutno nije moguće poslati. Pozovite odgovarajući broj telefona ili pokušajte ponovo.";
+        } finally {
+          submit.disabled = false;
+          submit.textContent = "Pošalji upit";
+        }
+      });
+    }
+  </script>
+)}
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: 18px;
+    padding: 32px;
+    border: 2px solid var(--ink-950);
+    background: var(--paper-50);
+  }
+
+  .form-copy {
+    margin-bottom: 10px;
+  }
+
+  .contact-form label {
+    display: grid;
+    gap: 7px;
+    font-weight: 700;
+  }
+
+  .contact-form label span,
+  .privacy-note,
+  .form-status {
+    color: var(--text-muted-light);
+    font-weight: 400;
+  }
+
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea {
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 13px;
+    border: 1px solid var(--line-light);
+    border-radius: 4px;
+    color: var(--text-on-light);
+    background: #fff;
+  }
+
+  .contact-form textarea {
+    min-height: 130px;
+    resize: vertical;
+  }
+
+  .honeypot {
+    position: absolute;
+    left: -100vw;
+  }
+</style>

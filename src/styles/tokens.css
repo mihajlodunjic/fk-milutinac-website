@@ -1,0 +1,51 @@
+:root {
+  --ink-950: #07111f;
+  --ink-900: #0c1929;
+  --ink-800: #14243a;
+  --paper-50: #f7f4ed;
+  --paper-100: #eee9df;
+  --text-on-dark: #faf8f3;
+  --text-muted-dark: #b6c0cd;
+  --text-on-light: #101722;
+  --text-muted-light: #526071;
+  --milutinac-blue: #063a78;
+  --milutinac-blue-hover: #0a4c96;
+  --milutinac-red: #c52032;
+  --milutinac-red-hover: #a81728;
+  --milutinac-bridge: #67314f;
+  --line-dark: #29394e;
+  --line-light: #d6d0c5;
+  --success: #287a52;
+  --error: #b42332;
+  --gradient-brand: linear-gradient(110deg, #063a78 0%, #67314f 50%, #c52032 100%);
+  --font-display: Bitter, Georgia, "Times New Roman", serif;
+  --font-body: Manrope, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", Consolas, monospace;
+  --container: 1280px;
+  --container-wide: 1440px;
+  --gutter: 24px;
+  --page-pad: 64px;
+  --header-height: 86px;
+  --ease-board: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (max-width: 1199px) {
+  :root {
+    --page-pad: 36px;
+    --gutter: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --page-pad: 20px;
+    --gutter: 16px;
+    --header-height: 80px;
+  }
+}
+
+@media (max-width: 374px) {
+  :root {
+    --page-pad: 16px;
+  }
+}

@@ -1,0 +1,40 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { seo } from "@/data/seo";
+import { makeSchema } from "@/utils/schema";
+---
+
+<BaseLayout seo={seo.notFound} schema={makeSchema({ path: "/404/" })}>
+  <section class="not-found section section--dark" aria-labelledby="not-found-title">
+    <div class="section__inner">
+      <p class="eyebrow">404 / VAN TERENA</p>
+      <h1 id="not-found-title" class="page-title">Ova stranica je izašla van terena</h1>
+      <p class="lead">
+        Adresa možda više nije aktivna ili je link pogrešno unet. Vratite se na početnu stranicu ili otvorite informacije
+        o školi fudbala.
+      </p>
+      <div class="button-row">
+        <ActionLink href="/" variant="primary">Nazad na početnu</ActionLink>
+        <ActionLink href="/skola-fudbala/" variant="ghost">Pogledaj školu fudbala</ActionLink>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: calc(100svh - var(--header-height));
+    display: grid;
+    align-items: center;
+  }
+
+  .not-found .section__inner {
+    display: grid;
+    gap: 24px;
+  }
+
+  .not-found h1 {
+    max-width: 10ch;
+  }
+</style>

@@ -1,0 +1,649 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import ClubLogo from "@/components/global/ClubLogo.astro";
+import LocationBlock from "@/components/global/LocationBlock.astro";
+import ResponsiveFieldImage from "@/components/global/ResponsiveFieldImage.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { business, contacts, telHref } from "@/data/business";
+import { facilities } from "@/data/facilities";
+import { seo } from "@/data/seo";
+import { makeSchema } from "@/utils/schema";
+
+const quickRoutes = [
+  {
+    title: "Upis u školu",
+    text: "Pošaljite osnovne podatke i pitanje u vezi sa priključivanjem deteta odgovarajućoj grupi.",
+    cta: "Pošalji upit",
+    href: "/kontakt/#upis"
+  },
+  {
+    title: "Grupe i termini",
+    text: "Proverite aktuelnu grupu i raspored prema uzrastu deteta.",
+    cta: "Pozovi školu",
+    href: telHref(contacts.school.phone),
+    ariaLabel: contacts.school.ariaLabel
+  },
+  {
+    title: "Gde se trenira",
+    text: "Treninzi se održavaju u sportskom kompleksu FK Milutinac na adresi Nade Dimić 5–7.",
+    cta: "Otvori mapu",
+    href: business.mapUrl,
+    external: true
+  },
+  {
+    title: "Balon i tereni",
+    text: "Za rekreativne termine i korišćenje terena obratite se kontaktu za sportski kompleks.",
+    cta: "Kontakt za termin",
+    href: telHref(contacts.balloon.phone),
+    ariaLabel: contacts.balloon.ariaLabel
+  }
+];
+
+const programBlocks = [
+  {
+    title: "Učenje kroz igru",
+    text: "Fudbalske veštine uvode se kroz zadatke, poligone i situacije koje detetu drže pažnju i podstiču ga da aktivno učestvuje."
+  },
+  {
+    title: "Individualni napredak",
+    text: "Svako dete se razvija svojim tempom. Trenerski rad treba da prepozna razlike i pomogne detetu da postepeno usvaja nove veštine."
+  },
+  {
+    title: "Kretanje i motorika",
+    text: "Trening ne čine samo potezi sa loptom. Važan deo rada su koordinacija, ravnoteža, snalaženje u prostoru i sigurnije kretanje."
+  },
+  {
+    title: "Tim i sportske navike",
+    text: "Trening je i mesto za saradnju, druženje, poštovanje pravila i stvaranje navike redovne fizičke aktivnosti."
+  }
+];
+---
+
+<BaseLayout seo={{ ...seo.home, preloadHero: true }} schema={makeSchema({ path: "/" })}>
+  <section class="home-hero section--dark" aria-labelledby="home-title">
+    <div class="home-hero__inner container-wide">
+      <p class="home-hero__side meta">ZEMUN / 1947</p>
+      <div class="home-hero__copy reveal">
+        <p class="eyebrow">FK MILUTINAC / ZEMUN / OD 1947.</p>
+        <h1 id="home-title" class="hero-title">Prvi fudbalski koraci na Gardošu</h1>
+        <p class="lead">
+          Škola fudbala FK Milutinac okuplja decu kroz igru, učenje i rad usmeren na individualni napredak. Treninzi se
+          održavaju u sportskom kompleksu u Zemunu, u balonu i na otvorenim terenima.
+        </p>
+        <div class="button-row">
+          <ActionLink href="/kontakt/#upis" variant="primary">Pošalji upit za upis</ActionLink>
+          <ActionLink href={telHref(contacts.school.phone)} variant="ghost" ariaLabel="Pozovi školu fudbala FK Milutinac">
+            Pozovi školu fudbala
+          </ActionLink>
+        </div>
+        <a class="home-hero__phone" href={telHref(contacts.school.phone)} aria-label={contacts.school.ariaLabel}>
+          Kontakt škole: {contacts.school.phone}
+        </a>
+      </div>
+      <div class="home-hero__visual" aria-label="Grafička kompozicija FK Milutinac, grb i fudbalski teren">
+        <span class="home-hero__ring" aria-hidden="true"></span>
+        <ResponsiveFieldImage
+          variant="portrait"
+          loading="eager"
+          fetchpriority="high"
+          caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA"
+        />
+        <div class="home-hero__crest">
+          <ClubLogo size="large" />
+        </div>
+      </div>
+      <div class="home-hero__utility">
+        <span>Nade Dimić 5–7, Zemun</span>
+        <span>Balon i otvoreni tereni</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section quick-routes" aria-labelledby="quick-title">
+    <div class="section__inner">
+      <div class="section-heading">
+        <p class="section-index">FKM / 01</p>
+        <h2 id="quick-title">Od pitanja do pravog treninga</h2>
+        <p>
+          Uzrast, grupe i termini mogu da se menjaju tokom sezone. Izaberite informaciju koja vam je potrebna i javite se
+          direktno odgovarajućem kontaktu.
+        </p>
+      </div>
+      <div class="info-board">
+        {quickRoutes.map((item, index) => (
+          <article class="info-row">
+            <span class="info-row__number">{String(index + 1).padStart(2, "0")}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            <ActionLink href={item.href} ariaLabel={item.ariaLabel} external={item.external}>
+              {item.cta}
+            </ActionLink>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section school-approach" aria-labelledby="approach-title">
+    <div class="section__inner grid-12">
+      <div class="school-approach__heading">
+        <p class="section-index">FKM / 02 / ŠKOLA FUDBALA</p>
+        <h2 id="approach-title">Igra je početak. Napredak je proces.</h2>
+      </div>
+      <p class="school-approach__intro lead">
+        Rad škole povezuje fudbalsku igru, razvoj kretanja, učenje i pripadnost timu. Cilj je da dete napreduje u skladu
+        sa svojim uzrastom i da izgradi dugoročnu vezu sa sportom.
+      </p>
+      <div class="school-approach__program program-list">
+        {programBlocks.map((item) => (
+          <article class="program-row">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="school-approach__photo">
+        <ResponsiveFieldImage variant="wide" caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA" />
+      </div>
+      <div class="school-approach__cta">
+        <ActionLink href="/skola-fudbala/" variant="ghost">Pogledaj školu fudbala</ActionLink>
+      </div>
+    </div>
+  </section>
+
+  <section class="photo-break section--dark" aria-labelledby="photo-break-title">
+    <ResponsiveFieldImage
+      variant="banner"
+      alt="Neutralni široki kadar fudbalskog terena sa belom linijom"
+      caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA"
+    />
+    <div class="photo-break__copy">
+      <p class="eyebrow">FKM / PAUZA</p>
+      <h2 id="photo-break-title">Važno je šta dete nauči — i da poželi ponovo da izađe na teren.</h2>
+    </div>
+  </section>
+
+  <section class="section schedule-prompt" aria-labelledby="schedule-title">
+    <div class="section__inner grid-12">
+      <div class="schedule-prompt__copy">
+        <p class="section-index">AKTUELNE INFORMACIJE</p>
+        <h2 id="schedule-title">Prava grupa zavisi od uzrasta i rasporeda</h2>
+        <p class="lead">
+          Za informacije o aktuelnim grupama, terminima i mogućnosti priključivanja, javite se školi fudbala. Tako ćete
+          dobiti podatke koji važe za trenutni deo sezone.
+        </p>
+      </div>
+      <div class="schedule-prompt__board">
+        <p class="meta">Kontakt škole: {contacts.school.phone}</p>
+        <div class="button-row">
+          <ActionLink href={telHref(contacts.school.phone)} variant="primary" ariaLabel={contacts.school.ariaLabel}>
+            Pozovi školu fudbala
+          </ActionLink>
+          <ActionLink href="/kontakt/#upis" variant="ghost">Pošalji upit za upis</ActionLink>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark complex-index" aria-labelledby="complex-title">
+    <div class="section__inner grid-12">
+      <div class="complex-index__heading">
+        <p class="section-index">FKM / 03 / KOMPLEKS</p>
+        <h2 id="complex-title">Jedan kompleks, više razloga da dođete</h2>
+        <p class="lead">
+          Pored rada kluba i škole fudbala, na lokaciji Milutinca dostupni su balon sa veštačkom travom, otvoreni tereni,
+          fudbalski rođendani i povezani ugostiteljski sadržaji.
+        </p>
+      </div>
+      <div class="complex-index__photo">
+        <ResponsiveFieldImage variant="wide" caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA" />
+      </div>
+      <div class="complex-index__rows">
+        {facilities.map((item) => (
+          <article class="complex-row">
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+            <ActionLink href={item.key === "restaurant" ? item.href : telHref(item.contact.phone)} ariaLabel={item.contact.ariaLabel}>
+              {item.key === "restaurant" ? "Pogledaj restoran i proslave" : item.contact.cta}
+            </ActionLink>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section history-feature" aria-labelledby="history-title">
+    <span class="soft-1947" aria-hidden="true">1947</span>
+    <div class="section__inner grid-12">
+      <div class="history-feature__copy">
+        <p class="section-index">1947 / ZEMUN</p>
+        <h2 id="history-title">Milutinac: ime koje nosi istoriju</h2>
+        <p>Fudbalski klub Milutinac osnovan je 1947. godine u Zemunu.</p>
+        <p>
+          Klub nosi ime po Milutinu Ivkoviću „Milutincu“, jugoslovenskom reprezentativcu i kapitenu reprezentacije
+          Jugoslavije na Svetskom prvenstvu 1930. godine.
+        </p>
+        <p>
+          Danas se na istoj adresi susreću klupsko takmičenje, rad sa mlađim selekcijama, škola fudbala i svakodnevni
+          život sportskog kompleksa.
+        </p>
+        <ActionLink href="/klub/" variant="ghost">Pročitaj o klubu</ActionLink>
+      </div>
+    </div>
+  </section>
+
+  <LocationBlock />
+
+  <section class="section cta-band final-home-cta" aria-labelledby="final-home-title">
+    <div class="section__inner">
+      <p class="section-index">FKM / UPIS</p>
+      <h2 id="final-home-title">Pitajte za grupu koja odgovara vašem detetu</h2>
+      <p class="lead">Pošaljite upit ili pozovite školu fudbala da proverite aktuelne grupe i termine.</p>
+      <div class="button-row">
+        <ActionLink href="/kontakt/#upis" variant="primary">Pošalji upit za upis</ActionLink>
+        <ActionLink href={telHref(contacts.school.phone)} variant="ghost" ariaLabel={contacts.school.ariaLabel}>
+          Pozovi {contacts.school.phone}
+        </ActionLink>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .home-hero {
+    min-height: calc(92svh - var(--header-height));
+    padding: 44px var(--page-pad) 34px;
+    overflow: hidden;
+    background:
+      linear-gradient(90deg, rgba(250, 248, 243, 0.04) 1px, transparent 1px),
+      linear-gradient(rgba(250, 248, 243, 0.04) 1px, transparent 1px),
+      var(--ink-950);
+    background-size: 72px 72px;
+  }
+
+  .home-hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 58px repeat(12, minmax(0, 1fr));
+    gap: var(--gutter);
+    min-height: calc(92svh - var(--header-height) - 78px);
+    align-items: center;
+  }
+
+  .home-hero__side {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    color: var(--text-muted-dark);
+  }
+
+  .home-hero__copy {
+    grid-column: 2 / 9;
+    display: grid;
+    gap: 22px;
+    align-content: center;
+  }
+
+  .home-hero__copy .lead {
+    max-width: 650px;
+    color: var(--text-muted-dark);
+  }
+
+  .home-hero__phone {
+    width: fit-content;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-muted-dark);
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+  }
+
+  .home-hero__visual {
+    position: relative;
+    grid-column: 9 / -1;
+    align-self: stretch;
+    min-height: 580px;
+  }
+
+  .home-hero__visual .photo-frame {
+    position: absolute;
+    right: 0;
+    bottom: 48px;
+    width: min(430px, 100%);
+    height: 68%;
+  }
+
+  .home-hero__ring {
+    position: absolute;
+    right: 26px;
+    bottom: 10px;
+    width: 420px;
+    height: 420px;
+    border: 12px solid transparent;
+    border-radius: 999px;
+    background:
+      linear-gradient(var(--ink-950), var(--ink-950)) padding-box,
+      var(--gradient-brand) border-box;
+    clip-path: polygon(0 0, 100% 0, 100% 76%, 22% 100%, 0 70%);
+    animation: ring-draw 760ms var(--ease-board) both;
+  }
+
+  .home-hero__crest {
+    position: absolute;
+    top: 38px;
+    right: 190px;
+    padding: 12px;
+    background: var(--ink-950);
+    border: 1px solid var(--line-dark);
+  }
+
+  .home-hero__utility {
+    grid-column: 2 / -1;
+    align-self: end;
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line-dark);
+    color: var(--text-muted-dark);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+  }
+
+  .school-approach__heading {
+    grid-column: 1 / 6;
+  }
+
+  .school-approach__intro {
+    grid-column: 7 / -1;
+    color: var(--text-muted-light);
+  }
+
+  .school-approach__program {
+    grid-column: 1 / 8;
+    margin-top: 44px;
+  }
+
+  .school-approach__photo {
+    grid-column: 8 / -1;
+    margin-top: 44px;
+    min-height: 560px;
+  }
+
+  .school-approach__photo .photo-frame {
+    height: 100%;
+  }
+
+  .school-approach__cta {
+    grid-column: 1 / 8;
+    margin-top: 20px;
+  }
+
+  .photo-break {
+    position: relative;
+    min-height: 560px;
+    display: grid;
+    align-items: end;
+    overflow: hidden;
+  }
+
+  .photo-break .photo-frame {
+    position: absolute;
+    inset: 0;
+    border-radius: 0;
+  }
+
+  .photo-break::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: linear-gradient(90deg, rgba(7, 17, 31, 0.88), rgba(7, 17, 31, 0.28));
+  }
+
+  .photo-break__copy {
+    position: relative;
+    z-index: 2;
+    width: min(100%, var(--container));
+    margin: 0 auto;
+    padding: 110px var(--page-pad);
+  }
+
+  .photo-break h2 {
+    max-width: 760px;
+  }
+
+  .schedule-prompt {
+    background: var(--paper-50);
+  }
+
+  .schedule-prompt__copy {
+    grid-column: 1 / 8;
+    display: grid;
+    gap: 20px;
+  }
+
+  .schedule-prompt__board {
+    grid-column: 9 / -1;
+    align-self: center;
+    display: grid;
+    gap: 24px;
+    padding: 28px;
+    border: 2px solid var(--ink-950);
+    background: var(--paper-100);
+    box-shadow: 4px 4px 0 var(--ink-950);
+  }
+
+  .complex-index__heading {
+    grid-column: 1 / 7;
+    display: grid;
+    gap: 22px;
+  }
+
+  .complex-index__heading .lead {
+    color: var(--text-muted-dark);
+  }
+
+  .complex-index__photo {
+    grid-column: 8 / -1;
+    min-height: 410px;
+  }
+
+  .complex-index__photo .photo-frame {
+    height: 100%;
+  }
+
+  .complex-index__rows {
+    grid-column: 2 / 12;
+    display: grid;
+    gap: 0;
+    margin-top: 56px;
+    border-top: 1px solid var(--line-dark);
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .complex-row {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.9fr) minmax(0, 1.7fr) minmax(160px, auto);
+    gap: 22px;
+    align-items: center;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .complex-row:last-child {
+    border-bottom: 0;
+  }
+
+  .complex-row p {
+    color: var(--text-muted-dark);
+  }
+
+  .history-feature {
+    position: relative;
+    overflow: hidden;
+    background: var(--paper-50);
+  }
+
+  .history-feature__copy {
+    position: relative;
+    z-index: 1;
+    grid-column: 3 / 10;
+    display: grid;
+    gap: 20px;
+  }
+
+  .final-home-cta .section__inner {
+    display: grid;
+    gap: 22px;
+  }
+
+  .final-home-cta h2 {
+    max-width: 760px;
+  }
+
+  @keyframes ring-draw {
+    from {
+      opacity: 0;
+      transform: rotate(-10deg) scale(0.92);
+    }
+
+    to {
+      opacity: 1;
+      transform: rotate(0) scale(1);
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .home-hero__inner {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .home-hero__side {
+      display: none;
+    }
+
+    .home-hero__copy {
+      grid-column: 1 / 6;
+    }
+
+    .home-hero__visual {
+      grid-column: 6 / -1;
+      min-height: 520px;
+    }
+
+    .home-hero__crest {
+      right: 110px;
+    }
+
+    .home-hero__utility {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .home-hero {
+      min-height: auto;
+    }
+
+    .home-hero__inner {
+      min-height: auto;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .home-hero__copy,
+    .home-hero__visual,
+    .home-hero__utility {
+      grid-column: 1 / -1;
+    }
+
+    .home-hero__visual {
+      min-height: 460px;
+      margin-top: 18px;
+    }
+
+    .home-hero__visual .photo-frame {
+      width: 100%;
+      height: 430px;
+      bottom: 0;
+    }
+
+    .home-hero__ring {
+      right: -18px;
+      bottom: -26px;
+      width: 260px;
+      height: 260px;
+      border-width: 9px;
+    }
+
+    .home-hero__crest {
+      top: -12px;
+      right: auto;
+      left: 18px;
+    }
+
+    .home-hero__utility {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .school-approach__heading,
+    .school-approach__intro,
+    .school-approach__program,
+    .school-approach__photo,
+    .school-approach__cta,
+    .schedule-prompt__copy,
+    .schedule-prompt__board,
+    .complex-index__heading,
+    .complex-index__photo,
+    .complex-index__rows,
+    .history-feature__copy {
+      grid-column: 1 / -1;
+    }
+
+    .school-approach__photo,
+    .complex-index__photo {
+      min-height: 420px;
+    }
+
+    .complex-row {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .home-hero {
+      padding-top: 34px;
+    }
+
+    .home-hero__phone {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .home-hero__visual {
+      min-height: 390px;
+    }
+
+    .home-hero__visual .photo-frame {
+      height: 355px;
+    }
+
+    .photo-break {
+      min-height: 470px;
+    }
+
+    .photo-break__copy {
+      padding-block: 72px;
+    }
+
+    .schedule-prompt__board {
+      padding: 22px;
+      box-shadow: none;
+    }
+  }
+</style>

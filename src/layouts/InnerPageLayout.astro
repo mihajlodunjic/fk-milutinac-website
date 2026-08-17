@@ -1,0 +1,101 @@
+---
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro";
+import ResponsiveFieldImage from "@/components/global/ResponsiveFieldImage.astro";
+
+type Props = {
+  metadata: string;
+  title: string;
+  intro: string;
+  breadcrumbs: { name: string; item: string }[];
+};
+
+const { metadata, title, intro, breadcrumbs } = Astro.props;
+---
+
+<section class="inner-hero section section--dark">
+  <div class="section__inner grid-12">
+    <div class="inner-hero__copy reveal">
+      <Breadcrumbs items={breadcrumbs} />
+      <p class="eyebrow">{metadata}</p>
+      <h1 class="page-title">{title}</h1>
+      <p class="lead">{intro}</p>
+      <div class="inner-hero__actions">
+        <slot name="actions" />
+      </div>
+    </div>
+    <div class="inner-hero__visual">
+      <ResponsiveFieldImage variant="portrait" loading="eager" fetchpriority="high" caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA" />
+      <span class="inner-hero__ring" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<slot />
+
+<style>
+  .inner-hero {
+    min-height: 560px;
+    display: grid;
+    align-items: center;
+    padding-top: 76px;
+  }
+
+  .inner-hero__copy {
+    grid-column: 1 / 8;
+    display: grid;
+    gap: 22px;
+    align-content: center;
+  }
+
+  .inner-hero__actions {
+    margin-top: 8px;
+  }
+
+  .inner-hero__visual {
+    position: relative;
+    grid-column: 9 / -1;
+    align-self: stretch;
+    min-height: 440px;
+  }
+
+  .inner-hero__visual .photo-frame {
+    height: 100%;
+  }
+
+  .inner-hero__ring {
+    position: absolute;
+    right: -28px;
+    bottom: -28px;
+    width: 170px;
+    height: 170px;
+    border: 10px solid transparent;
+    border-radius: 999px;
+    background:
+      linear-gradient(var(--ink-950), var(--ink-950)) padding-box,
+      var(--gradient-brand) border-box;
+    clip-path: polygon(0 0, 100% 0, 100% 72%, 0 100%);
+  }
+
+  @media (max-width: 1023px) {
+    .inner-hero__copy {
+      grid-column: 1 / -1;
+    }
+
+    .inner-hero__visual {
+      grid-column: 2 / 8;
+      min-height: 360px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .inner-hero {
+      min-height: auto;
+      padding-top: 52px;
+    }
+
+    .inner-hero__visual {
+      grid-column: 1 / -1;
+      min-height: 320px;
+    }
+  }
+</style>

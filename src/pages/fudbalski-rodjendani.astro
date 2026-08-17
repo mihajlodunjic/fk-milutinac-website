@@ -1,0 +1,98 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import ResponsiveFieldImage from "@/components/global/ResponsiveFieldImage.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import InnerPageLayout from "@/layouts/InnerPageLayout.astro";
+import { business, contacts, telHref } from "@/data/business";
+import { seo } from "@/data/seo";
+import { makeBreadcrumbs, makeSchema } from "@/utils/schema";
+
+const breadcrumbs = makeBreadcrumbs(seo.birthdays.path, "Fudbalski rođendani");
+---
+
+<BaseLayout seo={{ ...seo.birthdays, preloadHero: true }} schema={makeSchema({ path: seo.birthdays.path, breadcrumbs })}>
+  <InnerPageLayout
+    metadata="DEČJI ROĐENDANI / ZEMUN"
+    title="Rođendan na fudbalskom terenu"
+    intro="Za dete koje želi da svoj dan provede uz loptu, igru i društvo, FK Milutinac organizuje dečje rođendane u sportskom okruženju na Gardošu."
+    breadcrumbs={breadcrumbs}
+  >
+    <div slot="actions" class="button-row">
+      <ActionLink href={telHref(contacts.birthdays.phone)} variant="primary" ariaLabel={contacts.birthdays.ariaLabel}>Pozovi za rođendan</ActionLink>
+      <a class="text-link" href={telHref(contacts.birthdays.phone)} aria-label={contacts.birthdays.ariaLabel}>{contacts.birthdays.phone}</a>
+    </div>
+
+    <section class="section birthday-concept" aria-labelledby="birthday-concept-title">
+      <div class="section__inner grid-12">
+        <div class="birthday-concept__copy">
+          <h2 id="birthday-concept-title">Fudbal, igra i druženje</h2>
+          <p class="lead">
+            Rođendan uz fudbal pruža deci prostor za aktivnu igru i zajedničko vreme na terenu. Detalji organizacije i
+            raspoloživi termini dogovaraju se direktno sa Milutincem.
+          </p>
+        </div>
+        <div class="birthday-concept__image">
+          <ResponsiveFieldImage variant="wide" caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section birthday-inquiry" aria-labelledby="birthday-inquiry-title">
+      <div class="section__inner grid-12">
+        <div class="birthday-inquiry__copy">
+          <p class="section-index">FKM / UPIT</p>
+          <h2 id="birthday-inquiry-title">Proverite termin i mogućnosti organizacije</h2>
+          <p class="lead">
+            Prilikom poziva navedite željeni datum, uzrast deteta i okviran broj gostiju. Konačan sadržaj i uslovi
+            potvrđuju se u direktnom dogovoru.
+          </p>
+          <ActionLink href={telHref(contacts.birthdays.phone)} variant="primary" ariaLabel={contacts.birthdays.ariaLabel}>
+            Pozovi {contacts.birthdays.phone}
+          </ActionLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="section birthday-location section--dark" aria-labelledby="birthday-location-title">
+      <div class="section__inner grid-12">
+        <div class="birthday-location__copy">
+          <h2 id="birthday-location-title">Sportski kompleks FK Milutinac</h2>
+          <p class="address-line">{business.address.compactLine}</p>
+          <ActionLink href={business.mapUrl} variant="ghost" external>Otvori mapu</ActionLink>
+        </div>
+      </div>
+    </section>
+  </InnerPageLayout>
+</BaseLayout>
+
+<style>
+  .birthday-concept__copy,
+  .birthday-inquiry__copy,
+  .birthday-location__copy {
+    grid-column: 2 / 8;
+    display: grid;
+    gap: 20px;
+  }
+
+  .birthday-concept__image {
+    grid-column: 8 / -1;
+    min-height: 430px;
+  }
+
+  .birthday-concept__image .photo-frame {
+    height: 100%;
+  }
+
+  .birthday-inquiry {
+    background: var(--paper-100);
+  }
+
+  @media (max-width: 1023px) {
+    .birthday-concept__copy,
+    .birthday-inquiry__copy,
+    .birthday-location__copy,
+    .birthday-concept__image {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

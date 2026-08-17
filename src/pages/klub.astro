@@ -1,0 +1,126 @@
+---
+import ActionLink from "@/components/global/ActionLink.astro";
+import ContactRouter from "@/components/global/ContactRouter.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import InnerPageLayout from "@/layouts/InnerPageLayout.astro";
+import { business, contacts, telHref } from "@/data/business";
+import { seo } from "@/data/seo";
+import { makeBreadcrumbs, makeSchema } from "@/utils/schema";
+
+const breadcrumbs = makeBreadcrumbs(seo.club.path, "Klub");
+---
+
+<BaseLayout seo={{ ...seo.club, preloadHero: true }} schema={makeSchema({ path: seo.club.path, breadcrumbs })}>
+  <InnerPageLayout
+    metadata="ZEMUN / OD 1947."
+    title="Klub iz Zemuna, od 1947."
+    intro="FK Milutinac povezuje klupsku istoriju, takmičarske selekcije i rad sa decom na stadionu u Zemunu."
+    breadcrumbs={breadcrumbs}
+  >
+    <div slot="actions" class="button-row">
+      <ActionLink href="/kontakt/" variant="primary">Kontaktiraj klub</ActionLink>
+    </div>
+
+    <section class="section history-name" aria-labelledby="name-title">
+      <span class="soft-1947" aria-hidden="true">1947</span>
+      <div class="section__inner grid-12">
+        <div class="history-name__copy">
+          <h2 id="name-title">Ime Milutina Ivkovića „Milutinca“</h2>
+          <p class="lead">
+            Klub nosi ime po Milutinu Ivkoviću „Milutincu“, jugoslovenskom reprezentativcu i kapitenu reprezentacije
+            Jugoslavije na Svetskom prvenstvu 1930. godine. Njegovo ime ostalo je u središtu klupskog grba i identiteta.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section club-today" aria-labelledby="today-title">
+      <div class="section__inner grid-12">
+        <div class="club-today__copy">
+          <h2 id="today-title">Seniori, mlađe selekcije i škola fudbala</h2>
+          <p>
+            Milutinac učestvuje u zvaničnim takmičenjima Fudbalskog saveza Beograda kroz seniorske i mlađe selekcije.
+            Škola fudbala predstavlja važan deo rada kluba i vezu sa novim generacijama igrača.
+          </p>
+          <ActionLink href="/skola-fudbala/" variant="ghost">Pogledaj školu fudbala</ActionLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark club-complex" aria-labelledby="club-complex-title">
+      <div class="section__inner grid-12">
+        <div class="club-complex__copy">
+          <p class="section-index">ZEMUN / GARDOŠ</p>
+          <h2 id="club-complex-title">Klupski život na Gardošu</h2>
+          <p class="lead">
+            Na adresi Nade Dimić 5–7 nalaze se stadion, balon, otvoreni tereni i sadržaji koji tokom nedelje okupljaju
+            igrače, decu, roditelje i rekreativce.
+          </p>
+          <div class="button-row">
+            <ActionLink href="/sportski-kompleks/" variant="primary">Pogledaj sportski kompleks</ActionLink>
+            <ActionLink href={business.mapUrl} variant="ghost" external>Otvori mapu</ActionLink>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section club-contact" aria-labelledby="club-contact-title">
+      <div class="section__inner">
+        <div class="section-heading">
+          <p class="section-index">FKM / KONTAKT</p>
+          <h2 id="club-contact-title">Kontakt za klub i selekcije</h2>
+          <p>
+            Za pitanja u vezi sa organizacijom kluba ili sportskim radom koristite odgovarajući broj telefona.
+          </p>
+        </div>
+        <ContactRouter keys={["operations", "sports"]} />
+        <div class="club-contact__direct">
+          <a href={telHref(contacts.operations.phone)}>{contacts.operations.phone}</a>
+          <a href={telHref(contacts.sports.phone)}>{contacts.sports.phone}</a>
+        </div>
+      </div>
+    </section>
+  </InnerPageLayout>
+</BaseLayout>
+
+<style>
+  .history-name,
+  .club-today {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .history-name__copy,
+  .club-today__copy,
+  .club-complex__copy {
+    grid-column: 3 / 10;
+    display: grid;
+    gap: 20px;
+  }
+
+  .club-today {
+    background: var(--paper-100);
+  }
+
+  .club-contact__direct {
+    margin-top: 24px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+  }
+
+  .club-contact__direct a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  @media (max-width: 1023px) {
+    .history-name__copy,
+    .club-today__copy,
+    .club-complex__copy {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

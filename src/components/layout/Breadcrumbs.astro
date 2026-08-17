@@ -1,0 +1,50 @@
+---
+type Crumb = {
+  name: string;
+  item: string;
+};
+
+type Props = {
+  items: Crumb[];
+};
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumbs" aria-label="Putanja stranice">
+  <ol>
+    {items.map((item, index) => (
+      <li>
+        {index < items.length - 1 ? <a href={item.item}>{item.name}</a> : <span aria-current="page">{item.name}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    color: var(--text-muted-dark);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+  }
+
+  .breadcrumbs li:not(:last-child)::after {
+    margin-left: 8px;
+    content: "/";
+    color: var(--milutinac-red);
+  }
+
+  .breadcrumbs a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+</style>
