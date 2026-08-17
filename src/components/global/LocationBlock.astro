@@ -1,6 +1,7 @@
 ---
 import ActionLink from "@/components/global/ActionLink.astro";
 import ContactRouter from "@/components/global/ContactRouter.astro";
+import MapEmbed from "@/components/global/MapEmbed.astro";
 import { business } from "@/data/business";
 ---
 
@@ -19,12 +20,8 @@ import { business } from "@/data/business";
         <ActionLink href="/kontakt/" variant="ghost">Pogledaj sve kontakte</ActionLink>
       </div>
     </div>
-    <div class="location-block__map map-preview" aria-label="Statički prikaz lokacije FK Milutinac u Zemunu">
-      <span class="map-preview__pin" aria-hidden="true"></span>
-      <div class="map-preview__label">
-        <p class="meta">{business.address.displayLine}</p>
-        <strong>{business.locationName}</strong>
-      </div>
+    <div class="location-block__map">
+      <MapEmbed />
     </div>
     <div class="location-block__contacts">
       <ContactRouter keys={["school", "balloon", "birthdays"]} />

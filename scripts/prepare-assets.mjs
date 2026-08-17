@@ -58,6 +58,10 @@ const cleanedLogo = await sharp(data, { raw: info })
   .toBuffer();
 
 await sharp(cleanedLogo)
+  .resize(1024, 1024, { fit: "contain", withoutEnlargement: true })
+  .png({ compressionLevel: 9 })
+  .toFile("public/logo-transparent.png");
+await sharp(cleanedLogo)
   .resize(768, 768, { fit: "contain", withoutEnlargement: true })
   .png({ compressionLevel: 9 })
   .toFile("public/logo-clean.png");

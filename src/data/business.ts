@@ -18,6 +18,9 @@ export type Contact = {
 
 const siteUrlFromEnv = import.meta.env.PUBLIC_SITE_URL?.replace(/\/$/, "") || "";
 const mapUrlFromEnv = import.meta.env.PUBLIC_MAP_URL || "";
+const mapEmbedUrlFromEnv = import.meta.env.PUBLIC_MAP_EMBED_URL || "";
+const mapDirectionsUrlFromEnv = import.meta.env.PUBLIC_MAP_DIRECTIONS_URL || "";
+const encodedMapAddress = "Nade%20Dimi%C4%87%205-7%2C%20Zemun%2C%20Beograd";
 
 export const hasConfiguredSiteUrl = Boolean(siteUrlFromEnv);
 
@@ -45,10 +48,19 @@ export const business = {
   siteUrl: siteUrlFromEnv || "http://localhost:4321",
   hasConfiguredSiteUrl,
   environment: import.meta.env.PUBLIC_ENVIRONMENT || "local",
-  mapUrl:
+  mapDirectionsUrl:
+    mapDirectionsUrlFromEnv ||
     mapUrlFromEnv ||
-    "https://www.google.com/maps/search/?api=1&query=Nade%20Dimi%C4%87%205%E2%80%937%2C%20Zemun%2C%20Beograd",
-  logo: "/logo-clean.png",
+    `https://www.google.com/maps/search/?api=1&query=${encodedMapAddress}`,
+  mapEmbedUrl:
+    mapEmbedUrlFromEnv ||
+    `https://www.google.com/maps?q=${encodedMapAddress}&output=embed`,
+  mapUrl:
+    mapDirectionsUrlFromEnv ||
+    mapUrlFromEnv ||
+    `https://www.google.com/maps/search/?api=1&query=${encodedMapAddress}`,
+  logo: "/logo-transparent.png",
+  cleanLogo: "/logo-clean.png",
   originalLogo: "/logo.png",
   ogImage: "/og.png"
 } as const;

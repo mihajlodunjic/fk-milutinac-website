@@ -2,7 +2,6 @@
 import ActionLink from "@/components/global/ActionLink.astro";
 import ClubLogo from "@/components/global/ClubLogo.astro";
 import LocationBlock from "@/components/global/LocationBlock.astro";
-import ResponsiveFieldImage from "@/components/global/ResponsiveFieldImage.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { business, contacts, telHref } from "@/data/business";
 import { facilities } from "@/data/facilities";
@@ -59,7 +58,7 @@ const programBlocks = [
 ];
 ---
 
-<BaseLayout seo={{ ...seo.home, preloadHero: true }} schema={makeSchema({ path: "/" })}>
+<BaseLayout seo={seo.home} schema={makeSchema({ path: "/" })}>
   <section class="home-hero section--dark" aria-labelledby="home-title">
     <div class="home-hero__inner container-wide">
       <p class="home-hero__side meta">ZEMUN / 1947</p>
@@ -80,17 +79,15 @@ const programBlocks = [
           Kontakt škole: {contacts.school.phone}
         </a>
       </div>
-      <div class="home-hero__visual" aria-label="Grafička kompozicija FK Milutinac, grb i fudbalski teren">
+      <div class="home-hero__visual" aria-label="Brendirana kompozicija FK Milutinac, grb i Gardoš">
+        <span class="home-hero__year" aria-hidden="true">1947</span>
         <span class="home-hero__ring" aria-hidden="true"></span>
-        <ResponsiveFieldImage
-          variant="portrait"
-          loading="eager"
-          fetchpriority="high"
-          caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA"
-        />
+        <span class="home-hero__line home-hero__line--top" aria-hidden="true"></span>
+        <span class="home-hero__line home-hero__line--bottom" aria-hidden="true"></span>
         <div class="home-hero__crest">
           <ClubLogo size="large" />
         </div>
+        <p class="home-hero__visual-meta meta">ZEMUN / GARDOŠ</p>
       </div>
       <div class="home-hero__utility">
         <span>Nade Dimić 5–7, Zemun</span>
@@ -142,9 +139,12 @@ const programBlocks = [
           </article>
         ))}
       </div>
-      <div class="school-approach__photo">
-        <ResponsiveFieldImage variant="wide" caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA" />
-      </div>
+      <aside class="school-approach__panel" aria-label="Metadata škole fudbala">
+        <span class="school-panel__number" aria-hidden="true">02</span>
+        <p class="school-panel__label meta">ŠKOLA FUDBALA</p>
+        <span class="school-panel__line" aria-hidden="true"></span>
+        <p class="school-panel__sequence meta">IGRA / KRETANJE / NAPREDAK / TIM</p>
+      </aside>
       <div class="school-approach__cta">
         <ActionLink href="/skola-fudbala/" variant="ghost">Pogledaj školu fudbala</ActionLink>
       </div>
@@ -152,14 +152,11 @@ const programBlocks = [
   </section>
 
   <section class="photo-break section--dark" aria-labelledby="photo-break-title">
-    <ResponsiveFieldImage
-      variant="banner"
-      alt="Neutralni široki kadar fudbalskog terena sa belom linijom"
-      caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA"
-    />
-    <div class="photo-break__copy">
-      <p class="eyebrow">FKM / PAUZA</p>
+    <div class="photo-break__copy section__inner">
+      <span class="photo-break__line" aria-hidden="true"></span>
+      <p class="eyebrow">ŠKOLA FUDBALA / GARDOŠ</p>
       <h2 id="photo-break-title">Važno je šta dete nauči — i da poželi ponovo da izađe na teren.</h2>
+      <span class="photo-break__ring" aria-hidden="true"></span>
     </div>
   </section>
 
@@ -190,13 +187,14 @@ const programBlocks = [
       <div class="complex-index__heading">
         <p class="section-index">FKM / 03 / KOMPLEKS</p>
         <h2 id="complex-title">Jedan kompleks, više razloga da dođete</h2>
-        <p class="lead">
-          Pored rada kluba i škole fudbala, na lokaciji Milutinca dostupni su balon sa veštačkom travom, otvoreni tereni,
-          fudbalski rođendani i povezani ugostiteljski sadržaji.
-        </p>
       </div>
-      <div class="complex-index__photo">
-        <ResponsiveFieldImage variant="wide" caption="FUDBALSKI MOTIV / VEŠTAČKA TRAVA" />
+      <p class="complex-index__intro lead">
+        Pored rada kluba i škole fudbala, na lokaciji Milutinca dostupni su balon sa veštačkom travom, otvoreni tereni,
+        fudbalski rođendani i povezani ugostiteljski sadržaji.
+      </p>
+      <div class="complex-index__mark" aria-hidden="true">
+        <span>03</span>
+        <i></i>
       </div>
       <div class="complex-index__rows">
         {facilities.map((item) => (
@@ -252,7 +250,7 @@ const programBlocks = [
 <style>
   .home-hero {
     min-height: calc(92svh - var(--header-height));
-    padding: 44px var(--page-pad) 34px;
+    padding: 44px 0 34px;
     overflow: hidden;
     background:
       linear-gradient(90deg, rgba(250, 248, 243, 0.04) 1px, transparent 1px),
@@ -268,6 +266,7 @@ const programBlocks = [
     gap: var(--gutter);
     min-height: calc(92svh - var(--header-height) - 78px);
     align-items: center;
+    padding-inline: var(--page-pad);
   }
 
   .home-hero__side {
@@ -302,39 +301,74 @@ const programBlocks = [
     position: relative;
     grid-column: 9 / -1;
     align-self: stretch;
-    min-height: 580px;
-  }
-
-  .home-hero__visual .photo-frame {
-    position: absolute;
-    right: 0;
-    bottom: 48px;
-    width: min(430px, 100%);
-    height: 68%;
+    min-height: 540px;
+    isolation: isolate;
   }
 
   .home-hero__ring {
     position: absolute;
-    right: 26px;
-    bottom: 10px;
-    width: 420px;
-    height: 420px;
+    z-index: 1;
+    right: 0;
+    top: 82px;
+    width: min(430px, 88%);
+    aspect-ratio: 1;
     border: 12px solid transparent;
     border-radius: 999px;
     background:
       linear-gradient(var(--ink-950), var(--ink-950)) padding-box,
       var(--gradient-brand) border-box;
-    clip-path: polygon(0 0, 100% 0, 100% 76%, 22% 100%, 0 70%);
+    clip-path: polygon(8% 0, 100% 0, 100% 68%, 72% 90%, 28% 98%, 0 72%, 0 24%);
     animation: ring-draw 760ms var(--ease-board) both;
+  }
+
+  .home-hero__year {
+    position: absolute;
+    z-index: 0;
+    top: 58px;
+    right: -12px;
+    color: rgba(250, 248, 243, 0.045);
+    font-family: var(--font-mono);
+    font-size: clamp(7.5rem, 14vw, 15rem);
+    line-height: 1;
+  }
+
+  .home-hero__line {
+    position: absolute;
+    z-index: 0;
+    right: 24px;
+    left: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(250, 248, 243, 0.2), transparent);
+  }
+
+  .home-hero__line--top {
+    top: 25%;
+  }
+
+  .home-hero__line--bottom {
+    bottom: 18%;
   }
 
   .home-hero__crest {
     position: absolute;
-    top: 38px;
-    right: 190px;
-    padding: 12px;
-    background: var(--ink-950);
-    border: 1px solid var(--line-dark);
+    z-index: 3;
+    top: 142px;
+    right: 118px;
+  }
+
+  .home-hero__crest :global(.club-logo--large) {
+    --logo-size: clamp(230px, 24vw, 360px);
+  }
+
+  .home-hero__visual-meta {
+    position: absolute;
+    z-index: 2;
+    right: 26px;
+    bottom: 72px;
+    padding-top: 12px;
+    color: var(--text-muted-dark);
+    border-top: 2px solid transparent;
+    border-image: var(--gradient-brand) 1;
   }
 
   .home-hero__utility {
@@ -365,14 +399,37 @@ const programBlocks = [
     margin-top: 44px;
   }
 
-  .school-approach__photo {
+  .school-approach__panel {
     grid-column: 8 / -1;
     margin-top: 44px;
-    min-height: 560px;
+    min-height: 520px;
+    display: grid;
+    align-content: end;
+    gap: 22px;
+    padding: 18px 0 8px 34px;
+    border-left: 1px solid var(--line-light);
   }
 
-  .school-approach__photo .photo-frame {
-    height: 100%;
+  .school-panel__number {
+    color: rgba(7, 17, 31, 0.08);
+    font-family: var(--font-mono);
+    font-size: clamp(8rem, 15vw, 14rem);
+    line-height: 0.78;
+  }
+
+  .school-panel__label {
+    color: var(--milutinac-red);
+  }
+
+  .school-panel__line {
+    width: 4px;
+    height: 156px;
+    background: var(--gradient-brand);
+  }
+
+  .school-panel__sequence {
+    max-width: 18ch;
+    color: var(--text-muted-light);
   }
 
   .school-approach__cta {
@@ -382,35 +439,52 @@ const programBlocks = [
 
   .photo-break {
     position: relative;
-    min-height: 560px;
+    min-height: 400px;
     display: grid;
-    align-items: end;
+    align-items: center;
     overflow: hidden;
-  }
-
-  .photo-break .photo-frame {
-    position: absolute;
-    inset: 0;
-    border-radius: 0;
-  }
-
-  .photo-break::after {
-    position: absolute;
-    inset: 0;
-    content: "";
-    background: linear-gradient(90deg, rgba(7, 17, 31, 0.88), rgba(7, 17, 31, 0.28));
+    background:
+      linear-gradient(90deg, rgba(250, 248, 243, 0.035) 1px, transparent 1px),
+      linear-gradient(rgba(250, 248, 243, 0.035) 1px, transparent 1px),
+      var(--ink-950);
+    background-size: 72px 72px;
   }
 
   .photo-break__copy {
     position: relative;
-    z-index: 2;
-    width: min(100%, var(--container));
-    margin: 0 auto;
-    padding: 110px var(--page-pad);
+    display: grid;
+    gap: 18px;
+    padding-block: 68px;
+    padding-inline: var(--page-pad);
+    isolation: isolate;
+  }
+
+  .photo-break__line {
+    width: min(420px, 70vw);
+    height: 3px;
+    background: var(--gradient-brand);
   }
 
   .photo-break h2 {
-    max-width: 760px;
+    max-width: 920px;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    line-height: 1.02;
+  }
+
+  .photo-break__ring {
+    position: absolute;
+    z-index: -1;
+    right: 2%;
+    bottom: -48px;
+    width: min(290px, 42vw);
+    aspect-ratio: 1;
+    border: 10px solid transparent;
+    border-radius: 999px;
+    background:
+      linear-gradient(var(--ink-950), var(--ink-950)) padding-box,
+      var(--gradient-brand) border-box;
+    clip-path: polygon(0 0, 100% 0, 100% 66%, 70% 88%, 20% 100%, 0 68%);
+    opacity: 0.7;
   }
 
   .schedule-prompt {
@@ -435,26 +509,52 @@ const programBlocks = [
   }
 
   .complex-index__heading {
-    grid-column: 1 / 7;
+    grid-column: 1 / 8;
     display: grid;
     gap: 22px;
   }
 
-  .complex-index__heading .lead {
+  .complex-index .section__inner {
+    position: relative;
+  }
+
+  .complex-index__intro {
+    grid-column: 8 / -1;
+    align-self: end;
     color: var(--text-muted-dark);
   }
 
-  .complex-index__photo {
-    grid-column: 8 / -1;
-    min-height: 410px;
+  .complex-index__mark {
+    position: absolute;
+    top: -36px;
+    right: 0;
+    display: grid;
+    justify-items: end;
+    gap: 10px;
+    pointer-events: none;
   }
 
-  .complex-index__photo .photo-frame {
-    height: 100%;
+  .complex-index__mark span {
+    color: rgba(250, 248, 243, 0.06);
+    font-family: var(--font-mono);
+    font-size: clamp(6rem, 10vw, 10rem);
+    line-height: 1;
+  }
+
+  .complex-index__mark i {
+    width: 132px;
+    height: 132px;
+    border: 8px solid transparent;
+    border-radius: 999px;
+    background:
+      linear-gradient(var(--ink-950), var(--ink-950)) padding-box,
+      var(--gradient-brand) border-box;
+    clip-path: polygon(0 0, 100% 0, 100% 62%, 54% 88%, 0 72%);
+    opacity: 0.66;
   }
 
   .complex-index__rows {
-    grid-column: 2 / 12;
+    grid-column: 1 / -1;
     display: grid;
     gap: 0;
     margin-top: 56px;
@@ -493,6 +593,11 @@ const programBlocks = [
     gap: 20px;
   }
 
+  .history-feature__copy :global(.button) {
+    width: fit-content;
+    justify-self: start;
+  }
+
   .final-home-cta .section__inner {
     display: grid;
     gap: 22px;
@@ -529,11 +634,12 @@ const programBlocks = [
 
     .home-hero__visual {
       grid-column: 6 / -1;
-      min-height: 520px;
+      min-height: 500px;
     }
 
     .home-hero__crest {
-      right: 110px;
+      top: 150px;
+      right: 72px;
     }
 
     .home-hero__utility {
@@ -559,28 +665,42 @@ const programBlocks = [
     }
 
     .home-hero__visual {
-      min-height: 460px;
+      min-height: 350px;
       margin-top: 18px;
     }
 
-    .home-hero__visual .photo-frame {
-      width: 100%;
-      height: 430px;
-      bottom: 0;
+    .home-hero__year {
+      top: 8px;
+      right: 0;
+      font-size: clamp(5.5rem, 26vw, 10rem);
+    }
+
+    .home-hero__line {
+      right: 0;
+      left: 0;
     }
 
     .home-hero__ring {
-      right: -18px;
-      bottom: -26px;
-      width: 260px;
-      height: 260px;
+      top: 28px;
+      right: 4px;
+      width: min(310px, 78vw);
       border-width: 9px;
     }
 
     .home-hero__crest {
-      top: -12px;
+      top: 76px;
       right: auto;
-      left: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .home-hero__crest :global(.club-logo--large) {
+      --logo-size: min(230px, 58vw);
+    }
+
+    .home-hero__visual-meta {
+      right: 0;
+      bottom: 12px;
     }
 
     .home-hero__utility {
@@ -593,20 +713,52 @@ const programBlocks = [
     .school-approach__heading,
     .school-approach__intro,
     .school-approach__program,
-    .school-approach__photo,
+    .school-approach__panel,
     .school-approach__cta,
     .schedule-prompt__copy,
     .schedule-prompt__board,
     .complex-index__heading,
-    .complex-index__photo,
+    .complex-index__intro,
+    .complex-index__mark,
     .complex-index__rows,
     .history-feature__copy {
       grid-column: 1 / -1;
     }
 
-    .school-approach__photo,
-    .complex-index__photo {
-      min-height: 420px;
+    .school-approach__panel {
+      min-height: auto;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      padding: 18px 0;
+      border-top: 1px solid var(--line-light);
+      border-bottom: 1px solid var(--line-light);
+      border-left: 0;
+    }
+
+    .school-panel__number {
+      font-size: 5rem;
+      line-height: 1;
+    }
+
+    .school-panel__line {
+      width: 100%;
+      height: 3px;
+    }
+
+    .school-panel__sequence {
+      max-width: none;
+    }
+
+    .complex-index__mark {
+      position: relative;
+      top: auto;
+      right: auto;
+      justify-self: end;
+      margin-top: -30px;
+    }
+
+    .complex-index__mark i {
+      display: none;
     }
 
     .complex-row {
@@ -626,19 +778,28 @@ const programBlocks = [
     }
 
     .home-hero__visual {
-      min-height: 390px;
-    }
-
-    .home-hero__visual .photo-frame {
-      height: 355px;
+      min-height: 310px;
     }
 
     .photo-break {
-      min-height: 470px;
+      min-height: 320px;
     }
 
     .photo-break__copy {
-      padding-block: 72px;
+      padding-block: 54px;
+    }
+
+    .photo-break h2 {
+      font-size: clamp(2rem, 11vw, 3rem);
+    }
+
+    .school-approach__panel {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .school-panel__number {
+      font-size: 4.4rem;
     }
 
     .schedule-prompt__board {

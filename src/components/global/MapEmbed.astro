@@ -1,0 +1,18 @@
+---
+import { business } from "@/data/business";
+---
+
+<div class="map-embed" aria-label={`Mapa lokacije: ${business.address.line}`}>
+  <iframe
+    src={business.mapEmbedUrl}
+    title={`Mapa: ${business.address.line}`}
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+  ></iframe>
+  <div class="map-embed__label">
+    <p class="meta">{business.address.displayLine}</p>
+    <a href={business.mapDirectionsUrl} target="_blank" rel="noopener noreferrer">
+      Otvori mapu
+    </a>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 ---
 import ActionLink from "@/components/global/ActionLink.astro";
 import ContactRouter from "@/components/global/ContactRouter.astro";
+import MapEmbed from "@/components/global/MapEmbed.astro";
 import ContactForm from "@/components/forms/ContactForm.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import InnerPageLayout from "@/layouts/InnerPageLayout.astro";
@@ -42,12 +43,8 @@ const hasContactEndpoint = Boolean(import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT)
           <p class="lead">SC Milutinac Gardoš je zajednička lokacija kluba, škole fudbala, balona, terena i povezanih sadržaja.</p>
           <ActionLink href={business.mapUrl} variant="ghost" external>Otvori mapu</ActionLink>
         </div>
-        <div class="contact-address__map map-preview" aria-label="Statički prikaz lokacije u Zemunu">
-          <span class="map-preview__pin" aria-hidden="true"></span>
-          <div class="map-preview__label">
-            <p class="meta">{business.address.displayLine}</p>
-            <strong>{business.locationName}</strong>
-          </div>
+        <div class="contact-address__map">
+          <MapEmbed />
         </div>
       </div>
     </section>
