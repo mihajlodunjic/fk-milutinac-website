@@ -1,0 +1,485 @@
+---
+import ClubLogo from "@/components/global/ClubLogo.astro";
+---
+
+<a class="live-club-seal" href="/klub/" aria-label="Pročitaj priču o FK Milutinac" data-live-club-seal>
+  <span class="crest-stage" data-crest-stage>
+    <span class="crest-stage__year" aria-hidden="true" data-seal-year>1947</span>
+    <span class="home-hero__ring crest-stage__ring" aria-hidden="true" data-seal-ring>
+      <svg class="crest-stage__ring-svg" viewBox="0 0 200 200" focusable="false">
+        <defs>
+          <linearGradient id="live-club-seal-gradient" x1="32" y1="43" x2="32" y2="157" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="var(--milutinac-blue)" />
+            <stop offset="0.52" stop-color="var(--milutinac-bridge)" />
+            <stop offset="1" stop-color="var(--milutinac-red)" />
+          </linearGradient>
+        </defs>
+        <path class="crest-stage__ring-track" d="M 32.6 43.4 A 88 88 0 1 1 32.6 156.6" pathLength="1" />
+        <path class="crest-stage__ring-path" d="M 32.6 43.4 A 88 88 0 1 1 32.6 156.6" pathLength="1" />
+      </svg>
+    </span>
+    <span class="crest-stage__crest" data-seal-crest>
+      <span class="crest-stage__crest-scale">
+        <ClubLogo size="large" />
+      </span>
+    </span>
+  </span>
+  <span class="live-club-seal__meta meta">
+    <span class="live-club-seal__meta-line" aria-hidden="true"></span>
+    <span>ZEMUN / GARDOŠ</span>
+  </span>
+  <span class="live-club-seal__story meta" aria-hidden="true">PRIČA KLUBA →</span>
+</a>
+
+<script>
+  (() => {
+    const seals = Array.from(document.querySelectorAll<HTMLElement>("[data-live-club-seal]"));
+    if (!seals.length) return;
+
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const pointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    if (motionQuery.matches || !pointerQuery.matches) return;
+
+    seals.forEach((seal) => {
+      const hero = seal.closest<HTMLElement>(".home-hero");
+      if (!hero) return;
+
+      let raf = 0;
+      let active = false;
+      const current = { x: 0, y: 0, yearX: 0, yearY: 0, rotate: 0 };
+      const target = { x: 0, y: 0, yearX: 0, yearY: 0, rotate: 0 };
+
+      const write = () => {
+        raf = 0;
+        current.x += (target.x - current.x) * 0.14;
+        current.y += (target.y - current.y) * 0.14;
+        current.yearX += (target.yearX - current.yearX) * 0.12;
+        current.yearY += (target.yearY - current.yearY) * 0.12;
+        current.rotate += (target.rotate - current.rotate) * 0.16;
+
+        seal.style.setProperty("--seal-x", `${current.x.toFixed(2)}px`);
+        seal.style.setProperty("--seal-y", `${current.y.toFixed(2)}px`);
+        seal.style.setProperty("--seal-year-x", `${current.yearX.toFixed(2)}px`);
+        seal.style.setProperty("--seal-year-y", `${current.yearY.toFixed(2)}px`);
+        seal.style.setProperty("--seal-ring-rotate", `${current.rotate.toFixed(2)}deg`);
+
+        const settled =
+          Math.abs(current.x - target.x) < 0.02 &&
+          Math.abs(current.y - target.y) < 0.02 &&
+          Math.abs(current.yearX - target.yearX) < 0.02 &&
+          Math.abs(current.yearY - target.yearY) < 0.02 &&
+          Math.abs(current.rotate - target.rotate) < 0.02;
+
+        if (settled && !active) {
+          current.x = 0;
+          current.y = 0;
+          current.yearX = 0;
+          current.yearY = 0;
+          current.rotate = 0;
+          seal.style.removeProperty("--seal-x");
+          seal.style.removeProperty("--seal-y");
+          seal.style.removeProperty("--seal-year-x");
+          seal.style.removeProperty("--seal-year-y");
+          seal.style.removeProperty("--seal-ring-rotate");
+          seal.classList.remove("is-tracking");
+          return;
+        }
+
+        raf = window.requestAnimationFrame(write);
+      };
+
+      const requestWrite = () => {
+        if (!raf) raf = window.requestAnimationFrame(write);
+      };
+
+      const setNeutral = () => {
+        active = false;
+        target.x = 0;
+        target.y = 0;
+        target.yearX = 0;
+        target.yearY = 0;
+        target.rotate = 0;
+        requestWrite();
+      };
+
+      const onPointerMove = (event: PointerEvent) => {
+        const rect = hero.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+        const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+        active = true;
+        seal.classList.add("is-tracking");
+        target.x = Math.max(-1, Math.min(1, x)) * 5;
+        target.y = Math.max(-1, Math.min(1, y)) * 5;
+        target.yearX = Math.max(-1, Math.min(1, x)) * -10;
+        target.yearY = Math.max(-1, Math.min(1, y)) * -10;
+        target.rotate = Math.max(-1, Math.min(1, x)) * 3;
+        requestWrite();
+      };
+
+      hero.addEventListener("pointermove", onPointerMove, { passive: true });
+      hero.addEventListener("pointerleave", setNeutral);
+      window.addEventListener(
+        "pagehide",
+        () => {
+          hero.removeEventListener("pointermove", onPointerMove);
+          hero.removeEventListener("pointerleave", setNeutral);
+          if (raf) window.cancelAnimationFrame(raf);
+        },
+        { once: true }
+      );
+    });
+  })();
+</script>
+
+<style>
+  .live-club-seal {
+    --seal-size: min(430px, 100%);
+    --seal-x: 0px;
+    --seal-y: 0px;
+    --seal-year-x: 0px;
+    --seal-year-y: 0px;
+    --seal-ring-rotate: 0deg;
+    --seal-hover-rotate: 0deg;
+    --seal-crest-hover-scale: 1;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    width: min(100%, 480px);
+    min-width: 0;
+    gap: 12px;
+    color: inherit;
+    text-decoration: none;
+    touch-action: manipulation;
+  }
+
+  .live-club-seal::after {
+    position: absolute;
+    inset: -12px -18px;
+    content: "";
+  }
+
+  .live-club-seal:focus-visible {
+    outline: 3px solid var(--paper-50);
+    outline-offset: 8px;
+    box-shadow: 0 0 0 5px var(--milutinac-blue);
+  }
+
+  .live-club-seal:is(:hover, :focus) {
+    --seal-hover-rotate: 4deg;
+    --seal-crest-hover-scale: 1.015;
+  }
+
+  .crest-stage {
+    position: relative;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    width: var(--seal-size);
+    aspect-ratio: 1;
+    place-items: center;
+    transform: translate3d(var(--seal-x), var(--seal-y), 0);
+    transform-origin: center;
+    transition: transform 360ms var(--ease-board);
+  }
+
+  .is-tracking .crest-stage {
+    transition: none;
+    will-change: transform;
+  }
+
+  .crest-stage > * {
+    grid-area: 1 / 1;
+    min-width: 0;
+    min-height: 0;
+    place-self: center;
+  }
+
+  .crest-stage__year {
+    z-index: 0;
+    width: 100%;
+    color: rgba(250, 248, 243, 0.055);
+    font-family: var(--font-mono);
+    font-size: clamp(7.5rem, 13vw, 14rem);
+    line-height: 1;
+    text-align: center;
+    pointer-events: none;
+    transform: translate3d(var(--seal-year-x), calc(var(--seal-year-y) + 0px), 0);
+    animation: seal-year-in 420ms var(--ease-board) 80ms both;
+  }
+
+  .crest-stage__ring {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    transform: rotate(calc(var(--seal-ring-rotate) + var(--seal-hover-rotate)));
+    transform-origin: center;
+    transition: transform 320ms var(--ease-board);
+  }
+
+  .is-tracking .crest-stage__ring {
+    transition: none;
+    will-change: transform;
+  }
+
+  .crest-stage__ring-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .crest-stage__ring-track,
+  .crest-stage__ring-path {
+    fill: none;
+    stroke-width: 7;
+    stroke-linecap: butt;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .crest-stage__ring-track {
+    stroke: rgba(250, 248, 243, 0.09);
+  }
+
+  .crest-stage__ring-path {
+    stroke: url("#live-club-seal-gradient");
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: seal-ring-draw 620ms var(--ease-board) 320ms both;
+  }
+
+  .crest-stage__crest {
+    z-index: 3;
+    display: grid;
+    width: 76%;
+    aspect-ratio: 1;
+    place-items: center;
+    opacity: 0;
+    clip-path: circle(0% at 50% 50%);
+    transform: scale(var(--seal-crest-hover-scale));
+    transform-origin: center;
+    transition: transform 260ms var(--ease-board);
+    animation: seal-crest-mask 460ms var(--ease-board) 680ms both;
+  }
+
+  .crest-stage__crest-scale {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    transform-origin: center;
+    animation: seal-crest-scale 460ms var(--ease-board) 680ms both;
+  }
+
+  .crest-stage__crest :global(.club-logo--large) {
+    --logo-size: 100%;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+  }
+
+  .crest-stage__crest :global(.club-logo__mark) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .live-club-seal__meta {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    min-width: min(240px, 76%);
+    gap: 10px;
+    color: var(--text-muted-dark);
+    text-align: center;
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+    animation: seal-meta-in 300ms var(--ease-board) 980ms both;
+  }
+
+  .live-club-seal__meta-line {
+    width: 100%;
+    height: 2px;
+    background: var(--gradient-brand);
+    transform: scaleX(0);
+    transform-origin: center;
+    animation: seal-meta-line 300ms var(--ease-board) 980ms both;
+  }
+
+  .live-club-seal__story {
+    position: relative;
+    z-index: 2;
+    min-height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--paper-50);
+    opacity: 0;
+    transform: translate3d(0, -4px, 0);
+    transition:
+      opacity 220ms var(--ease-board),
+      transform 220ms var(--ease-board),
+      color 220ms var(--ease-board);
+  }
+
+  .live-club-seal:is(:hover, :focus) .live-club-seal__story {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    color: var(--milutinac-red);
+  }
+
+  @keyframes seal-year-in {
+    from {
+      opacity: 0;
+      transform: translate3d(var(--seal-year-x), calc(var(--seal-year-y) + 10px), 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(var(--seal-year-x), var(--seal-year-y), 0);
+    }
+  }
+
+  @keyframes seal-ring-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes seal-crest-mask {
+    from {
+      opacity: 0;
+      clip-path: circle(0% at 50% 50%);
+    }
+
+    to {
+      opacity: 1;
+      clip-path: circle(74% at 50% 50%);
+    }
+  }
+
+  @keyframes seal-crest-scale {
+    from {
+      transform: scale(0.94);
+    }
+
+    to {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes seal-meta-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 8px, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes seal-meta-line {
+    from {
+      transform: scaleX(0);
+    }
+
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .live-club-seal {
+      --seal-size: min(360px, 100%);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .live-club-seal {
+      --seal-size: min(310px, 84vw);
+      gap: 10px;
+    }
+
+    .crest-stage__ring-track,
+    .crest-stage__ring-path {
+      stroke-width: 6;
+    }
+
+    .crest-stage__year {
+      font-size: clamp(5.5rem, 25vw, 9rem);
+    }
+
+    .live-club-seal__meta {
+      min-width: min(220px, 76%);
+    }
+
+    .live-club-seal__story {
+      color: var(--text-muted-dark);
+      opacity: 0.82;
+      transform: none;
+    }
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .live-club-seal__story {
+      color: var(--text-muted-dark);
+      opacity: 0.82;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-club-seal,
+    .crest-stage,
+    .crest-stage__year,
+    .crest-stage__ring,
+    .crest-stage__crest,
+    .crest-stage__crest-scale,
+    .live-club-seal__meta,
+    .live-club-seal__meta-line,
+    .live-club-seal__story {
+      transition: none !important;
+      animation: none !important;
+      will-change: auto !important;
+    }
+
+    .crest-stage,
+    .crest-stage__year,
+    .crest-stage__ring,
+    .crest-stage__crest-scale,
+    .live-club-seal__meta,
+    .live-club-seal__story {
+      transform: none !important;
+    }
+
+    .crest-stage__ring-path {
+      stroke-dashoffset: 0;
+    }
+
+    .crest-stage__crest {
+      opacity: 1;
+      clip-path: circle(74% at 50% 50%);
+      transform: none !important;
+    }
+
+    .live-club-seal__meta,
+    .live-club-seal__story {
+      opacity: 1;
+    }
+
+    .live-club-seal__meta-line {
+      transform: scaleX(1) !important;
+    }
+
+    .live-club-seal:is(:hover, :focus) .live-club-seal__story {
+      color: var(--milutinac-red);
+    }
+  }
+</style>
