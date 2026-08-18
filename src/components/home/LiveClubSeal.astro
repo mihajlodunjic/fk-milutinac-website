@@ -8,14 +8,14 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
     <span class="home-hero__ring crest-stage__ring" aria-hidden="true" data-seal-ring>
       <svg class="crest-stage__ring-svg" viewBox="0 0 200 200" focusable="false">
         <defs>
-          <linearGradient id="live-club-seal-gradient" x1="32" y1="43" x2="32" y2="157" gradientUnits="userSpaceOnUse">
+          <linearGradient id="live-club-seal-gradient" x1="42" y1="30" x2="158" y2="170" gradientUnits="userSpaceOnUse">
             <stop offset="0" stop-color="var(--milutinac-blue)" />
             <stop offset="0.52" stop-color="var(--milutinac-bridge)" />
             <stop offset="1" stop-color="var(--milutinac-red)" />
           </linearGradient>
         </defs>
-        <path class="crest-stage__ring-track" d="M 32.6 43.4 A 88 88 0 1 1 32.6 156.6" pathLength="1" />
-        <path class="crest-stage__ring-path" d="M 32.6 43.4 A 88 88 0 1 1 32.6 156.6" pathLength="1" />
+        <circle class="crest-stage__ring-track" cx="100" cy="100" r="86" pathLength="1" />
+        <circle class="crest-stage__ring-path" cx="100" cy="100" r="86" pathLength="1" />
       </svg>
     </span>
     <span class="crest-stage__crest" data-seal-crest>
@@ -227,6 +227,9 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
     width: 100%;
     height: 100%;
     overflow: visible;
+    transform: rotate(84deg) scale(1);
+    transform-origin: center;
+    animation: seal-ring-arrive 1200ms var(--ease-board) 140ms both;
   }
 
   .crest-stage__ring-track,
@@ -234,6 +237,8 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
     fill: none;
     stroke-width: 7;
     stroke-linecap: butt;
+    stroke-dasharray: 0.78 0.22;
+    stroke-dashoffset: 0;
     vector-effect: non-scaling-stroke;
   }
 
@@ -243,9 +248,9 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
 
   .crest-stage__ring-path {
     stroke: url("#live-club-seal-gradient");
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: seal-ring-draw 620ms var(--ease-board) 320ms both;
+    stroke-dasharray: 0 1;
+    opacity: 0;
+    animation: seal-ring-draw 1200ms var(--ease-board) 140ms both;
   }
 
   .crest-stage__crest {
@@ -259,7 +264,7 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
     transform: scale(var(--seal-crest-hover-scale));
     transform-origin: center;
     transition: transform 260ms var(--ease-board);
-    animation: seal-crest-mask 460ms var(--ease-board) 680ms both;
+    animation: seal-crest-mask 480ms var(--ease-board) 300ms both;
   }
 
   .crest-stage__crest-scale {
@@ -268,7 +273,7 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
     height: 100%;
     place-items: center;
     transform-origin: center;
-    animation: seal-crest-scale 460ms var(--ease-board) 680ms both;
+    animation: seal-crest-scale 480ms var(--ease-board) 300ms both;
   }
 
   .crest-stage__crest :global(.club-logo--large) {
@@ -295,7 +300,7 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
     text-align: center;
     opacity: 0;
     transform: translate3d(0, 8px, 0);
-    animation: seal-meta-in 300ms var(--ease-board) 980ms both;
+    animation: seal-meta-in 300ms var(--ease-board) 1080ms both;
   }
 
   .live-club-seal__meta-line {
@@ -304,7 +309,7 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
     background: var(--gradient-brand);
     transform: scaleX(0);
     transform-origin: center;
-    animation: seal-meta-line 300ms var(--ease-board) 980ms both;
+    animation: seal-meta-line 300ms var(--ease-board) 1080ms both;
   }
 
   .live-club-seal__story {
@@ -343,11 +348,23 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
 
   @keyframes seal-ring-draw {
     from {
-      stroke-dashoffset: 1;
+      opacity: 0;
+      stroke-dasharray: 0 1;
     }
 
     to {
-      stroke-dashoffset: 0;
+      opacity: 1;
+      stroke-dasharray: 0.78 0.22;
+    }
+  }
+
+  @keyframes seal-ring-arrive {
+    from {
+      transform: rotate(76deg) scale(0.965);
+    }
+
+    to {
+      transform: rotate(84deg) scale(1);
     }
   }
 
@@ -440,6 +457,7 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
     .crest-stage,
     .crest-stage__year,
     .crest-stage__ring,
+    .crest-stage__ring-svg,
     .crest-stage__crest,
     .crest-stage__crest-scale,
     .live-club-seal__meta,
@@ -460,7 +478,8 @@ import ClubLogo from "@/components/global/ClubLogo.astro";
     }
 
     .crest-stage__ring-path {
-      stroke-dashoffset: 0;
+      opacity: 1;
+      stroke-dasharray: 0.78 0.22;
     }
 
     .crest-stage__crest {
