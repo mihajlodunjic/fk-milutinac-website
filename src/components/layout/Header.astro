@@ -6,10 +6,12 @@ import { navigation } from "@/data/navigation";
 
 type Props = {
   currentPath: string;
+  disableInternalLinks?: boolean;
 };
 
-const { currentPath } = Astro.props;
+const { currentPath, disableInternalLinks = false } = Astro.props;
 const isActive = (href: string) => (href === "/" ? currentPath === "/" : currentPath.startsWith(href));
+const disableNavItem = (href: string) => disableInternalLinks && href !== "/";
 ---
 
 <header class="site-header" data-site-header>
@@ -18,12 +20,17 @@ const isActive = (href: string) => (href === "/" ? currentPath === "/" : current
   </a>
   <nav class="site-nav" aria-label="Glavna navigacija">
     {navigation.map((item) => (
-      <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+      <a
+        href={disableNavItem(item.href) ? undefined : item.href}
+        aria-current={isActive(item.href) ? "page" : undefined}
+        aria-disabled={disableNavItem(item.href) ? "true" : undefined}
+        tabindex={disableNavItem(item.href) ? "-1" : undefined}
+      >
         {item.label}
       </a>
     ))}
   </nav>
-  <ActionLink href="/kontakt/#upis" variant="primary">Upit za upis</ActionLink>
+  <ActionLink href="/kontakt/#upis" variant="primary" disabled={disableInternalLinks}>Upit za upis</ActionLink>
   <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Otvori meni" data-menu-button>
     <span></span>
     <span></span>
@@ -32,13 +39,18 @@ const isActive = (href: string) => (href === "/" ? currentPath === "/" : current
   <div class="mobile-panel" id="mobile-menu" hidden data-menu-panel>
     <nav aria-label="Mobilna navigacija">
       {navigation.map((item) => (
-        <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+        <a
+          href={disableNavItem(item.href) ? undefined : item.href}
+          aria-current={isActive(item.href) ? "page" : undefined}
+          aria-disabled={disableNavItem(item.href) ? "true" : undefined}
+          tabindex={disableNavItem(item.href) ? "-1" : undefined}
+        >
           {item.label}
         </a>
       ))}
     </nav>
     <div class="mobile-panel__cta">
-      <ActionLink href="/kontakt/#upis" variant="primary">Upis</ActionLink>
+      <ActionLink href="/kontakt/#upis" variant="primary" disabled={disableInternalLinks}>Upis</ActionLink>
       <a class="mobile-panel__phone" href={telHref(contacts.school.phone)} aria-label={contacts.school.ariaLabel}>
         {contacts.school.phone}
       </a>

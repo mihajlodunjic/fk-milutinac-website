@@ -5,17 +5,20 @@ type Props = {
   variant?: "primary" | "light" | "ghost" | "text";
   ariaLabel?: string;
   external?: boolean;
+  disabled?: boolean;
 };
 
-const { href, label, variant = "text", ariaLabel, external = false } = Astro.props;
+const { href, label, variant = "text", ariaLabel, external = false, disabled = false } = Astro.props;
 ---
 
 <a
   class={variant === "text" ? "text-link" : `button button--${variant}`}
-  href={href}
+  href={disabled ? undefined : href}
   aria-label={ariaLabel}
-  target={external ? "_blank" : undefined}
-  rel={external ? "noopener noreferrer" : undefined}
+  aria-disabled={disabled ? "true" : undefined}
+  tabindex={disabled ? "-1" : undefined}
+  target={external && !disabled ? "_blank" : undefined}
+  rel={external && !disabled ? "noopener noreferrer" : undefined}
 >
   <slot>{label}</slot>
   <svg class="arrow-icon" viewBox="0 0 20 20" aria-hidden="true">

@@ -56,6 +56,10 @@ const programBlocks = [
     text: "Trening je i mesto za saradnju, druženje, poštovanje pravila i stvaranje navike redovne fizičke aktivnosti."
   }
 ];
+
+const disableInternalLinks = true;
+const isInternalSiteLink = (href: string) => href.startsWith("/") && href !== "/";
+const facilityHref = (item: (typeof facilities)[number]) => (item.key === "restaurant" ? item.href : telHref(item.contact.phone));
 ---
 
 <BaseLayout seo={seo.home} schema={makeSchema({ path: "/" })}>
@@ -70,7 +74,7 @@ const programBlocks = [
           održavaju u sportskom kompleksu u Zemunu, u balonu i na otvorenim terenima.
         </p>
         <div class="button-row">
-          <ActionLink href="/kontakt/#upis" variant="primary">Pošalji upit za upis</ActionLink>
+          <ActionLink href="/kontakt/#upis" variant="primary" disabled={disableInternalLinks}>Pošalji upit za upis</ActionLink>
           <ActionLink href={telHref(contacts.school.phone)} variant="ghost" ariaLabel="Pozovi školu fudbala FK Milutinac">
             Pozovi školu fudbala
           </ActionLink>
@@ -82,7 +86,7 @@ const programBlocks = [
       <div class="home-hero__visual" aria-label="Brendirana kompozicija FK Milutinac, grb i Gardoš">
         <span class="home-hero__line home-hero__line--top" aria-hidden="true"></span>
         <span class="home-hero__line home-hero__line--bottom" aria-hidden="true"></span>
-        <LiveClubSeal />
+        <LiveClubSeal disabled={disableInternalLinks} />
       </div>
       <div class="home-hero__utility">
         <span>Nade Dimić 5–7, Zemun</span>
@@ -107,7 +111,7 @@ const programBlocks = [
             <span class="info-row__number">{String(index + 1).padStart(2, "0")}</span>
             <h3>{item.title}</h3>
             <p>{item.text}</p>
-            <ActionLink href={item.href} ariaLabel={item.ariaLabel} external={item.external}>
+            <ActionLink href={item.href} ariaLabel={item.ariaLabel} external={item.external} disabled={isInternalSiteLink(item.href)}>
               {item.cta}
             </ActionLink>
           </article>
@@ -141,7 +145,7 @@ const programBlocks = [
         <p class="school-panel__sequence meta">IGRA / KRETANJE / NAPREDAK / TIM</p>
       </aside>
       <div class="school-approach__cta">
-        <ActionLink href="/skola-fudbala/" variant="ghost">Pogledaj školu fudbala</ActionLink>
+        <ActionLink href="/skola-fudbala/" variant="ghost" disabled={disableInternalLinks}>Pogledaj školu fudbala</ActionLink>
       </div>
     </div>
   </section>
@@ -170,7 +174,7 @@ const programBlocks = [
           <ActionLink href={telHref(contacts.school.phone)} variant="primary" ariaLabel={contacts.school.ariaLabel}>
             Pozovi školu fudbala
           </ActionLink>
-          <ActionLink href="/kontakt/#upis" variant="ghost">Pošalji upit za upis</ActionLink>
+          <ActionLink href="/kontakt/#upis" variant="ghost" disabled={disableInternalLinks}>Pošalji upit za upis</ActionLink>
         </div>
       </div>
     </div>
@@ -191,7 +195,7 @@ const programBlocks = [
           <article class="complex-row">
             <h3>{item.name}</h3>
             <p>{item.description}</p>
-            <ActionLink href={item.key === "restaurant" ? item.href : telHref(item.contact.phone)} ariaLabel={item.contact.ariaLabel}>
+            <ActionLink href={facilityHref(item)} ariaLabel={item.contact.ariaLabel} disabled={isInternalSiteLink(facilityHref(item))}>
               {item.key === "restaurant" ? "Pogledaj restoran i proslave" : item.contact.cta}
             </ActionLink>
           </article>
@@ -215,12 +219,12 @@ const programBlocks = [
           Danas se na istoj adresi susreću klupsko takmičenje, rad sa mlađim selekcijama, škola fudbala i svakodnevni
           život sportskog kompleksa.
         </p>
-        <ActionLink href="/klub/" variant="ghost">Pročitaj o klubu</ActionLink>
+        <ActionLink href="/klub/" variant="ghost" disabled={disableInternalLinks}>Pročitaj o klubu</ActionLink>
       </div>
     </div>
   </section>
 
-  <LocationBlock />
+  <LocationBlock disableInternalLinks={disableInternalLinks} />
 
   <section class="section cta-band final-home-cta" aria-labelledby="final-home-title">
     <div class="section__inner">
@@ -228,7 +232,7 @@ const programBlocks = [
       <h2 id="final-home-title">Pitajte za grupu koja odgovara vašem detetu</h2>
       <p class="lead">Pošaljite upit ili pozovite školu fudbala da proverite aktuelne grupe i termine.</p>
       <div class="button-row">
-        <ActionLink href="/kontakt/#upis" variant="primary">Pošalji upit za upis</ActionLink>
+        <ActionLink href="/kontakt/#upis" variant="primary" disabled={disableInternalLinks}>Pošalji upit za upis</ActionLink>
         <ActionLink href={telHref(contacts.school.phone)} variant="ghost" ariaLabel={contacts.school.ariaLabel}>
           Pozovi {contacts.school.phone}
         </ActionLink>

@@ -12,6 +12,7 @@ type Props = {
 
 const { seo, schema } = Astro.props;
 const currentPath = new URL(Astro.url).pathname;
+const disableInternalLinks = currentPath === "/";
 ---
 
 <!doctype html>
@@ -24,10 +25,10 @@ const currentPath = new URL(Astro.url).pathname;
   </head>
   <body>
     <a class="skip-link" href="#main">Preskoči na sadržaj</a>
-    <Header currentPath={currentPath} />
+    <Header currentPath={currentPath} disableInternalLinks={disableInternalLinks} />
     <main id="main" class="site-main">
       <slot />
     </main>
-    <Footer />
+    <Footer disableInternalLinks={disableInternalLinks} />
   </body>
 </html>

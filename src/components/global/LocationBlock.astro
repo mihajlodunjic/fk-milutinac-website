@@ -3,6 +3,12 @@ import ActionLink from "@/components/global/ActionLink.astro";
 import ContactRouter from "@/components/global/ContactRouter.astro";
 import MapEmbed from "@/components/global/MapEmbed.astro";
 import { business } from "@/data/business";
+
+type Props = {
+  disableInternalLinks?: boolean;
+};
+
+const { disableInternalLinks = false } = Astro.props;
 ---
 
 <section class="section location-block" aria-labelledby="location-title">
@@ -17,7 +23,7 @@ import { business } from "@/data/business";
       </p>
       <div class="button-row">
         <ActionLink href={business.mapUrl} variant="primary" external>Otvori mapu</ActionLink>
-        <ActionLink href="/kontakt/" variant="ghost">Pogledaj sve kontakte</ActionLink>
+        <ActionLink href="/kontakt/" variant="ghost" disabled={disableInternalLinks}>Pogledaj sve kontakte</ActionLink>
       </div>
     </div>
     <div class="location-block__map">

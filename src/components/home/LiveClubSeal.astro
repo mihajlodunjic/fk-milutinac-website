@@ -1,8 +1,21 @@
 ---
 import ClubLogo from "@/components/global/ClubLogo.astro";
+
+type Props = {
+  disabled?: boolean;
+};
+
+const { disabled = false } = Astro.props;
 ---
 
-<a class="live-club-seal" href="/klub/" aria-label="Pročitaj priču o FK Milutinac" data-live-club-seal>
+<a
+  class="live-club-seal"
+  href={disabled ? undefined : "/klub/"}
+  aria-label="Pročitaj priču o FK Milutinac"
+  aria-disabled={disabled ? "true" : undefined}
+  tabindex={disabled ? "-1" : undefined}
+  data-live-club-seal
+>
   <span class="crest-stage" data-crest-stage>
     <span class="crest-stage__year" aria-hidden="true" data-seal-year>1947</span>
     <span class="home-hero__ring crest-stage__ring" aria-hidden="true" data-seal-ring>

@@ -4,6 +4,11 @@ import { assetSources } from "@/data/assets";
 import { business, contacts, telHref } from "@/data/business";
 import { navigation } from "@/data/navigation";
 
+type Props = {
+  disableInternalLinks?: boolean;
+};
+
+const { disableInternalLinks = false } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
@@ -21,7 +26,19 @@ const year = new Date().getFullYear();
       <a class="text-link" href={business.mapUrl} target="_blank" rel="noopener noreferrer">Otvori lokaciju</a>
     </div>
     <nav class="site-footer__nav" aria-label="Footer navigacija">
-      {navigation.slice(1).map((item) => <a href={item.href}>{item.label}</a>)}
+      {
+        navigation
+          .slice(1)
+          .map((item) => (
+            <a
+              href={disableInternalLinks ? undefined : item.href}
+              aria-disabled={disableInternalLinks ? "true" : undefined}
+              tabindex={disableInternalLinks ? "-1" : undefined}
+            >
+              {item.label}
+            </a>
+          ))
+      }
     </nav>
     <div class="site-footer__contacts">
       <a href={telHref(contacts.school.phone)}>Škola fudbala: {contacts.school.phone}</a>
