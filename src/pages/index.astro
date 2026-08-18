@@ -61,9 +61,9 @@ const programBlocks = [
 <BaseLayout seo={seo.home} schema={makeSchema({ path: "/" })}>
   <section class="home-hero section--dark" aria-labelledby="home-title">
     <div class="home-hero__inner container-wide">
-      <p class="home-hero__side meta">ZEMUN / 1947</p>
+      <p class="home-hero__side meta">SC MILUTINAC / GARDOŠ</p>
       <div class="home-hero__copy reveal">
-        <p class="eyebrow">FK MILUTINAC / ZEMUN / OD 1947.</p>
+        <p class="eyebrow">FK MILUTINAC / ZEMUN / ŠKOLA FUDBALA</p>
         <h1 id="home-title" class="hero-title">Prvi fudbalski koraci na Gardošu</h1>
         <p class="lead">
           Škola fudbala FK Milutinac okuplja decu kroz igru, učenje i rad usmeren na individualni napredak. Treninzi se
@@ -80,12 +80,14 @@ const programBlocks = [
         </a>
       </div>
       <div class="home-hero__visual" aria-label="Brendirana kompozicija FK Milutinac, grb i Gardoš">
-        <span class="home-hero__year" aria-hidden="true">1947</span>
-        <span class="home-hero__ring" aria-hidden="true"></span>
         <span class="home-hero__line home-hero__line--top" aria-hidden="true"></span>
         <span class="home-hero__line home-hero__line--bottom" aria-hidden="true"></span>
-        <div class="home-hero__crest">
-          <ClubLogo size="large" />
+        <div class="home-hero__emblem">
+          <span class="home-hero__year" aria-hidden="true">1947</span>
+          <span class="home-hero__ring" aria-hidden="true"></span>
+          <div class="home-hero__crest">
+            <ClubLogo size="large" />
+          </div>
         </div>
         <p class="home-hero__visual-meta meta">ZEMUN / GARDOŠ</p>
       </div>
@@ -156,7 +158,6 @@ const programBlocks = [
       <span class="photo-break__line" aria-hidden="true"></span>
       <p class="eyebrow">ŠKOLA FUDBALA / GARDOŠ</p>
       <h2 id="photo-break-title">Važno je šta dete nauči — i da poželi ponovo da izađe na teren.</h2>
-      <span class="photo-break__ring" aria-hidden="true"></span>
     </div>
   </section>
 
@@ -192,10 +193,6 @@ const programBlocks = [
         Pored rada kluba i škole fudbala, na lokaciji Milutinca dostupni su balon sa veštačkom travom, otvoreni tereni,
         fudbalski rođendani i povezani ugostiteljski sadržaji.
       </p>
-      <div class="complex-index__mark" aria-hidden="true">
-        <span>03</span>
-        <i></i>
-      </div>
       <div class="complex-index__rows">
         {facilities.map((item) => (
           <article class="complex-row">
@@ -301,18 +298,35 @@ const programBlocks = [
     position: relative;
     grid-column: 9 / -1;
     align-self: stretch;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 18px;
     min-height: 540px;
     isolation: isolate;
   }
 
-  .home-hero__ring {
-    position: absolute;
-    z-index: 1;
-    right: 0;
-    top: 82px;
-    width: min(430px, 88%);
+  .home-hero__emblem {
+    position: relative;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    width: min(430px, 100%);
     aspect-ratio: 1;
-    border: 12px solid transparent;
+    place-items: center;
+  }
+
+  .home-hero__emblem > * {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .home-hero__ring {
+    grid-area: 1 / 1;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    place-self: center;
+    border: 8px solid transparent;
     border-radius: 999px;
     background:
       linear-gradient(var(--ink-950), var(--ink-950)) padding-box,
@@ -322,14 +336,16 @@ const programBlocks = [
   }
 
   .home-hero__year {
-    position: absolute;
+    grid-area: 1 / 1;
     z-index: 0;
-    top: 58px;
-    right: -12px;
-    color: rgba(250, 248, 243, 0.045);
+    place-self: center;
+    width: 100%;
+    color: rgba(250, 248, 243, 0.028);
     font-family: var(--font-mono);
-    font-size: clamp(7.5rem, 14vw, 15rem);
+    font-size: clamp(7.5rem, 13vw, 14rem);
     line-height: 1;
+    text-align: center;
+    pointer-events: none;
   }
 
   .home-hero__line {
@@ -350,23 +366,36 @@ const programBlocks = [
   }
 
   .home-hero__crest {
-    position: absolute;
+    grid-area: 1 / 1;
     z-index: 3;
-    top: 142px;
-    right: 118px;
+    display: grid;
+    width: 76%;
+    aspect-ratio: 1;
+    place-self: center;
+    place-items: center;
   }
 
   .home-hero__crest :global(.club-logo--large) {
-    --logo-size: clamp(230px, 24vw, 360px);
+    --logo-size: 100%;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+  }
+
+  .home-hero__crest :global(.club-logo__mark) {
+    width: 100%;
+    height: 100%;
   }
 
   .home-hero__visual-meta {
-    position: absolute;
+    position: relative;
     z-index: 2;
-    right: 26px;
-    bottom: 72px;
+    justify-self: center;
+    min-width: min(240px, 76%);
     padding-top: 12px;
     color: var(--text-muted-dark);
+    text-align: center;
     border-top: 2px solid transparent;
     border-image: var(--gradient-brand) 1;
   }
@@ -453,10 +482,10 @@ const programBlocks = [
   .photo-break__copy {
     position: relative;
     display: grid;
+    align-content: center;
     gap: 18px;
     padding-block: 68px;
     padding-inline: var(--page-pad);
-    isolation: isolate;
   }
 
   .photo-break__line {
@@ -466,25 +495,9 @@ const programBlocks = [
   }
 
   .photo-break h2 {
-    max-width: 920px;
+    max-width: 1040px;
     font-size: clamp(2.5rem, 5vw, 5rem);
     line-height: 1.02;
-  }
-
-  .photo-break__ring {
-    position: absolute;
-    z-index: -1;
-    right: 2%;
-    bottom: -48px;
-    width: min(290px, 42vw);
-    aspect-ratio: 1;
-    border: 10px solid transparent;
-    border-radius: 999px;
-    background:
-      linear-gradient(var(--ink-950), var(--ink-950)) padding-box,
-      var(--gradient-brand) border-box;
-    clip-path: polygon(0 0, 100% 0, 100% 66%, 70% 88%, 20% 100%, 0 68%);
-    opacity: 0.7;
   }
 
   .schedule-prompt {
@@ -520,37 +533,9 @@ const programBlocks = [
 
   .complex-index__intro {
     grid-column: 8 / -1;
-    align-self: end;
+    align-self: start;
+    padding-top: 40px;
     color: var(--text-muted-dark);
-  }
-
-  .complex-index__mark {
-    position: absolute;
-    top: -36px;
-    right: 0;
-    display: grid;
-    justify-items: end;
-    gap: 10px;
-    pointer-events: none;
-  }
-
-  .complex-index__mark span {
-    color: rgba(250, 248, 243, 0.06);
-    font-family: var(--font-mono);
-    font-size: clamp(6rem, 10vw, 10rem);
-    line-height: 1;
-  }
-
-  .complex-index__mark i {
-    width: 132px;
-    height: 132px;
-    border: 8px solid transparent;
-    border-radius: 999px;
-    background:
-      linear-gradient(var(--ink-950), var(--ink-950)) padding-box,
-      var(--gradient-brand) border-box;
-    clip-path: polygon(0 0, 100% 0, 100% 62%, 54% 88%, 0 72%);
-    opacity: 0.66;
   }
 
   .complex-index__rows {
@@ -637,9 +622,8 @@ const programBlocks = [
       min-height: 500px;
     }
 
-    .home-hero__crest {
-      top: 150px;
-      right: 72px;
+    .home-hero__emblem {
+      width: min(360px, 100%);
     }
 
     .home-hero__utility {
@@ -665,14 +649,13 @@ const programBlocks = [
     }
 
     .home-hero__visual {
-      min-height: 350px;
+      min-height: auto;
       margin-top: 18px;
+      gap: 14px;
     }
 
-    .home-hero__year {
-      top: 8px;
-      right: 0;
-      font-size: clamp(5.5rem, 26vw, 10rem);
+    .home-hero__emblem {
+      width: min(310px, 84vw);
     }
 
     .home-hero__line {
@@ -681,26 +664,15 @@ const programBlocks = [
     }
 
     .home-hero__ring {
-      top: 28px;
-      right: 4px;
-      width: min(310px, 78vw);
-      border-width: 9px;
+      border-width: 7px;
     }
 
-    .home-hero__crest {
-      top: 76px;
-      right: auto;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .home-hero__crest :global(.club-logo--large) {
-      --logo-size: min(230px, 58vw);
+    .home-hero__year {
+      font-size: clamp(5.5rem, 25vw, 9rem);
     }
 
     .home-hero__visual-meta {
-      right: 0;
-      bottom: 12px;
+      min-width: min(220px, 76%);
     }
 
     .home-hero__utility {
@@ -719,7 +691,6 @@ const programBlocks = [
     .schedule-prompt__board,
     .complex-index__heading,
     .complex-index__intro,
-    .complex-index__mark,
     .complex-index__rows,
     .history-feature__copy {
       grid-column: 1 / -1;
@@ -749,16 +720,8 @@ const programBlocks = [
       max-width: none;
     }
 
-    .complex-index__mark {
-      position: relative;
-      top: auto;
-      right: auto;
-      justify-self: end;
-      margin-top: -30px;
-    }
-
-    .complex-index__mark i {
-      display: none;
+    .complex-index__intro {
+      padding-top: 0;
     }
 
     .complex-row {
